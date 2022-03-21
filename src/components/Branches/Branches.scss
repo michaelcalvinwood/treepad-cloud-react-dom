@@ -1,0 +1,76 @@
+@import '../../styles/partials/variables.scss';
+
+.branches {
+    background-color: blue;
+    position: fixed;
+    bottom: 0;
+    transition: all .25s;
+
+    &--active {
+        width: 100vw;
+        height: 100vh;
+        left: 0;
+    }
+    &--inactive {
+        width: 0;
+        height: 0;
+        left: 0;
+    }
+    &--active-trees {
+        width: $branchWidth;
+        height: 100vh;
+        left: $treeWidth;        
+    }
+    &--inactive-trees {
+        width: 0;
+        height: 0;
+        left: $treeWidth;   
+    }
+    &--active-controls{
+        width: 100vw;
+        height: $branchHeight;
+        left: 0;
+    }
+    &--inactive-controls {
+        width: 0;
+        height: 0;
+        left: 0;
+    }
+    &--active-trees-controls {
+        width: $branchWidth;
+        height: $branchHeight;
+        left: $treeWidth; 
+    }
+    &--inactive-trees-controls {
+        width: 0;
+        height: 0;
+        left: $treeWidth; 
+        // top: $controlHeight;
+    }
+
+    &__title-container {
+        text-align: center;
+
+        &--active {
+            position: relative;
+            top: 2rem;
+        }
+        &--inactive {
+            position: relative;
+            top: -2rem;
+        }
+        &--inactive-trees {
+            position: relative;
+            top: -2rem;
+        }
+        &--inactive-controls {
+            position: relative;
+            top: -2rem;
+        }
+        &--inactive-trees-controls {
+            position: relative;
+            top: -2rem;
+        }
+    }
+
+}
