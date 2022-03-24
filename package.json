@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@material-design-icons/svg": "^0.10.8",
     "@mdi/font": "^6.5.95",
     "@testing-library/jest-dom": "^5.16.2",
     "@testing-library/react": "^12.1.4",
