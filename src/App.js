@@ -1,10 +1,12 @@
 import './App.scss';
 import { Component } from 'react';
-import Trees from './components/Trees/Trees';
-import Controls from './components/Controls/Controls';
-import Branches from './components/Branches/Branches';
-import Leaves from './components/Leaves/Leaves';
-import './styles/fontawesome/css/all.css'
+import Layout001 from './components/Layout001/Layout001';
+
+// import Trees from './components/Trees/Trees';
+// import Controls from './components/Controls/Controls';
+// import Branches from './components/Branches/Branches';
+// import Leaves from './components/Leaves/Leaves';
+// import './styles/fontawesome/css/all.css'
 
 class App extends Component {
   state = {
@@ -45,25 +47,16 @@ class App extends Component {
   render () {
     if (this.state.windowWidth > 768) {
       return (
-        <div className="app">
-          <Trees 
-            windowState={this.state.windowState}
-            clickHandler={this.clickHandler}/>
-          <Controls
-            windowState={this.state.windowState}
-            clickHandler={this.clickHandler}/>
-          <Branches
-            windowState={this.state.windowState}
-            clickHandler={this.clickHandler}/>
-          <Leaves 
-            lwindowState={this.state.windowState}
-            clickHandler={this.clickHandler}/>
-        </div>
+        <Layout001 
+          windowState={this.state.windowState} 
+          windowHeight={this.state.windowHeight}
+          windowWidth={this.state.windowWidth}
+          clickHandler={this.clickHandler}/>
       )
     }
     return (
       <div>
-        Screen dimensions not supported
+        {this.state.windowWidth})
       </div>
     ) 
   }

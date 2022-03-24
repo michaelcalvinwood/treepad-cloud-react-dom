@@ -1,0 +1,63 @@
+@import '../../../styles/partials/variables.scss';
+
+.leaves {
+    position: fixed;
+    right: 0;
+    background-color: red;
+    transition: all .25s;
+    z-index: 1;
+
+    &--active-trees-branches-leaves-controls {
+        height: $leaveHeight;
+        width: $leaveWidth;
+        top: $controlHeight;
+    }
+    &--active-trees-leaves-controls{
+        height: $leaveHeight;
+        width: calc($branchWidth + $leaveWidth);
+        top: $controlHeight;
+    }
+    &--active-leaves-controls {
+        height: $leaveHeight;
+        width: calc($treeWidth + $branchWidth + $leaveWidth);
+        top: $controlHeight;
+    }
+    &--active-branches-leaves-controls {
+        height: $leaveHeight;
+        width: $leaveWidth;
+        top: $controlHeight;
+    }
+    &--active-branches-leaves {
+        height: 100vh;
+        top: 0;
+        width: $leaveWidth;
+    }
+    &--active-trees-branches-controls {
+        top: $controlHeight;
+        width: 1rem;
+        height: 0;
+    }    
+    &--active-leaves {
+        height: 100vh;
+        width: 100vw;
+        top: 0;
+        left: 0;
+    }
+
+    &__title {
+        margin: 1rem;
+        text-align: center;
+
+        &--closed {
+            position: fixed;
+            width: 3rem;
+            right: 0;
+            top: $controlHeight;
+        }
+    }
+
+    &__icon {
+        height: 3rem;
+
+    }
+}
