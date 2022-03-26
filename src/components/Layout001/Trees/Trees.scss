@@ -5,10 +5,11 @@
     top: 0;
     height: 100vh;
     width: $treeWidth;
-    background-color: green;
+    background-color: white;
     transition: all .25s;
     z-index: 1;
     left: 0;
+    border-right: 1px solid black;
 
     &--active {
       

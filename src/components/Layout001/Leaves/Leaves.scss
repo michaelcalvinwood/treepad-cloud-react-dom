@@ -3,14 +3,16 @@
 .leaves {
     position: fixed;
     right: 0;
-    background-color: red;
+    background-color: white;
     transition: all .25s;
     z-index: 1;
+    border-left: 1px solid black;
+    border-top: 1px solid black;
 
     &--active-trees-branches-leaves-controls {
         height: $leaveHeight;
         width: $leaveWidth;
-        top: $controlHeight;
+        bottom: 0;
     }
     &--active-trees-leaves-controls{
         height: $leaveHeight;
@@ -25,7 +27,7 @@
     &--active-branches-leaves-controls {
         height: $leaveHeight;
         width: $leaveWidth;
-        top: $controlHeight;
+        bottom: 0;
     }
     &--active-branches-leaves {
         height: 100vh;

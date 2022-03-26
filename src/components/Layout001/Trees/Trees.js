@@ -1,8 +1,45 @@
 import React, { Component } from 'react'
 import './Trees.scss'
 import treeIcon from '../../../assets/icons/tree.svg';
+import TreeCard from '../TreeCard/TreeCard';
+import AddTree from '../AddTree/AddTree'
 
 export default class Trees extends Component {
+
+    state = {
+        addTree: false
+    }
+
+    closeModal = (userId, icon, color, treeName) => {
+        this.setState({
+            addTree: false
+        })
+    }
+
+    addTree = userId => {
+        this.setState({
+            addTree: true
+        })
+    }
+
+    showTree = () => {
+
+    }
+
+    handleSelect = (userId, treeName) => {
+        console.log (`Tree ${treeName}/${userId} is selected`);
+
+        if (treeName.toLowerCase() === 'add tree') this.addTree(userId);
+        else this.showTree(userId, treeName);
+    }
+
+    handleEdit = () => {
+
+    }
+
+    handleDelete = () => {
+
+    }
 
     componentDidMount() {
 
@@ -23,8 +60,9 @@ export default class Trees extends Component {
         }
 
     }
+
     render() {
-        const { windowState, clickHandler } = this.props;
+        const { windowState, clickHandler, userName, userId } = this.props;
         console.group ("Trees");
         console.log ('Trees state, clickHandler', windowState, clickHandler);
 
@@ -42,21 +80,45 @@ export default class Trees extends Component {
 
         }
 
-       
-    
         console.groupEnd();
+        let modal;
+
+        const info = {
+            icon: process.env.REACT_APP_BASE_URL + '/svg/tree.svg',
+            color: '#000000',
+            treeName: '',
+            userId,
+            userName,
+        }
+
+        console.log ("info", info)
         
         return (
-            <section className={sectionClassName}>
-                <div 
-                    className={titleClassName}
-                    onClick={e => clickHandler(e, 'trees')}>
-                      <img className={iconClassname} src={treeIcon} alt="tree" />
-                </div>
-                <div className={contentClassName}>
-                    Some Content
-                </div>
-            </section>
+            <>
+                <section className={sectionClassName}>
+                    <div 
+                        className={titleClassName}
+                        onClick={e => clickHandler(e, 'trees')}>
+                        <img className={iconClassname} src={treeIcon} alt="tree" />
+                    </div>
+                    <div className={contentClassName}>
+                        <TreeCard 
+                            icon='/svg/octicons/plus-24.svg'
+                            treeName="Add Tree"
+                            userName={userName}
+                            userId={userId}
+                            handleSelect={this.handleSelect}/>
+                    </div>
+                </section>
+                {this.state.addTree && 
+                    <AddTree 
+                        closeModal={this.closeModal}
+                        userName={userName}
+                        userId={userId}
+                        icon={process.env.REACT_APP_BASE_URL + '/svg/tree.svg'}
+                        iconList={this.props.iconList}/>
+                }
+            </>
         )
     }
 }
