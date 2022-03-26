@@ -1,0 +1,41 @@
+@import '../../../styles/partials/variables.scss';
+
+.controls {
+    background-color: yellow;
+    position: fixed;
+    top: 0;
+    transition: all .25s;
+
+    &--active {
+        width: calc($treeWidth + $controlWidth);
+        height: $controlHeight;
+        left: 0;
+    }
+    &--inactive {
+        width: calc($treeWidth + $controlWidth);
+        height: 0;
+        left: 0;
+        z-index: 5;
+    }
+    &--active-trees {
+        width: $controlWidth;
+        height: $controlHeight;
+        left: $treeWidth;
+        
+    }
+    &--inactive-trees {
+        width: $controlWidth;
+        height: 0;
+        left: $treeWidth;
+        z-index: 2;
+    }
+
+    &__title-container {
+        text-align: center;
+    }
+    &__icon {
+        width: 3rem;
+
+    }
+
+}
