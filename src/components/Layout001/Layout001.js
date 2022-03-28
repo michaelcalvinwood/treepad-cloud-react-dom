@@ -12,7 +12,9 @@ class App extends Component {
 
   state = {
     userName: localStorage.getItem('userName') || false,
-    userId: localStorage.getItem('userId') || false
+    userId: localStorage.getItem('userId') || 1, // Important: Change to false after adding signup
+    selectedTree: localStorage.getItem('selectedTree') || -2,
+    selectedBranch: localStorage.getItem('selectedBranch') || false
   }
   
   setUser = (userName, userId) => {
@@ -24,12 +26,26 @@ class App extends Component {
     console.log ('Layou001 setUser', userName, userId);
   }
 
+  setTheTree = treeId => {
+    console.log ("Layout001.js setTree", treeId)
+
+    this.setState({
+      selectedTree: treeId
+    })
+  }
+
+  setBranch = branchId => {
+    this.setState({
+      selectedBranch: branchId
+    })
+  }
+
   componentDidMount() {
     window.addEventListener('resize', this.windowResize);
   }
 
   render () {
-    const {windowState, windowHeight, windowWidth, clickHandler} = this.props;
+    const {windowState, windowHeight, windowWidth, clickHandler,setTheTree} = this.props;
 
     if (!this.state.userName || !this.state.userId) {
       return (
@@ -46,16 +62,19 @@ class App extends Component {
             clickHandler={clickHandler}/>
           <Branches
             windowState={windowState}
-            clickHandler={clickHandler}/>
+            clickHandler={clickHandler}
+            treeId={this.state.selectedTree}
+            branchId={this.state.selectedBranch}/>
           <Leaves 
             windowState={windowState}
             clickHandler={clickHandler}/>
           <Trees 
             windowState={windowState}
-            clickHandler={clickHandler}
+            clickHandler={this.setTheTree}
             userName={this.state.userName}
             userId={this.state.userId}
-            iconList={iconList}/>
+            iconList={iconList}
+            selectedTree={this.state.selectedTree}/>
           {/* <Modals modalName=''/> */}
         </div>
       )

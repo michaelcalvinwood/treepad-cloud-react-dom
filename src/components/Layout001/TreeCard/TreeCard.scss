@@ -15,6 +15,10 @@
         box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
     }
 
+    &--selected {
+        background-color: #8fd9a3;
+    }
+
     &__icon {
         display: block;
         margin: .25rem auto 0 auto;

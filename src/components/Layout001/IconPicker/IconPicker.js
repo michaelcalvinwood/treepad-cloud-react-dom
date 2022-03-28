@@ -25,9 +25,9 @@ export class IconPicker extends Component {
     // }
 
     getIconFilter = e => {
-        console.log (e.target.value);
+        // console.log (e.target.value);
 
-        const filter = e.target.value;
+        const filter = e.target.value.toLowerCase();
         const filteredIcons = this.props.iconList.filter(icon => this.iconName(icon).indexOf(filter) !== -1);
         console.log (filteredIcons.length);
         this.setState({
@@ -45,7 +45,7 @@ export class IconPicker extends Component {
     
     
   render() {
-      console.group("IconPicker")
+    //   console.group("IconPicker")
     const {iconList, iconSets} = this.props;
 
     // get the available icon sets from the full list
@@ -53,7 +53,7 @@ export class IconPicker extends Component {
     // console.log (iconSets);
     
 
-    console.groupEnd();
+    // console.groupEnd();
     return (
       <div className="icon-picker">
             <input 

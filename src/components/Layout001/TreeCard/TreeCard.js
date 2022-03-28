@@ -1,32 +1,34 @@
 import React from 'react';
 import './TreeCard.scss';
 
-function TreeCard({icon, color, treeName, userId, userName, handleSelect, handleEdit, handleDelete}) {
+function TreeCard({icon, color, treeName, treeId, userId, userName, selected, handleSelect, handleEdit, handleDelete}) {
     console.log (process.env);
     const iconPath = process.env.REACT_APP_BASE_URL + icon;
 
   return (
-    <div className="tree-card">
-        <img 
-            className="tree-card__icon" 
-            onClick={() => handleSelect(userId, treeName)}
-            src={iconPath} />
-        <p 
-            className="tree-card__tree-name"
-            onClick={() => handleSelect(userId, treeName)}>
-            {treeName}</p>
-        <p 
-            className="tree-card__user-name"
-            onClick={() => handleSelect(userId, treeName)}>
-            {userName}</p>
-        <div className = "tree-card__actions">
+    <div className={selected ? "tree-card tree-card--selected" : 'tree-card'}>
+        <div 
+            className="tree-card__click-area"
+            onClick={() => handleSelect(treeId)}>
             <img 
-                className="tree-card__edit" 
-                onClick={() => handleEdit(userId, treeName)}/>
-            <img 
-                className="tree-card__delete"
-                onClick={() => handleDelete(userId, treeName)}/>
+                className="tree-card__icon" 
+                src={iconPath} />
+            <p 
+                className="tree-card__tree-name" >
+                {treeName}</p>
+            <p 
+                className="tree-card__user-name" >
+                {userName}</p>
         </div>
+            <div className = "tree-card__actions">
+                <img 
+                    className="tree-card__edit" 
+                    onClick={() => handleEdit(userId, treeName, treeId)}/>
+                <img 
+                    className="tree-card__delete"
+                    onClick={() => handleDelete(userId, treeName, treeId)}/>
+            </div>
+        
     </div>
   )
 }

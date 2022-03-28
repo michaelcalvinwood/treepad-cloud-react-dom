@@ -2,35 +2,54 @@ import React, { Component } from 'react'
 import './Trees.scss'
 import treeIcon from '../../../assets/icons/tree.svg';
 import TreeCard from '../TreeCard/TreeCard';
-import AddTree from '../AddTree/AddTree'
+import AddTree from '../AddTree/AddTree';
+import axios from 'axios';
+
 
 export default class Trees extends Component {
 
     state = {
-        addTree: false
+        addTree: false,
+        trees: [],
     }
 
     closeModal = (userId, icon, color, treeName) => {
         this.setState({
             addTree: false
         })
+
+        const request = {
+            url: process.env.REACT_APP_BASE_URL + '/trees/' + this.props.userId,
+            method: "get"
+        }
+        axios(request)
+        .then((response) => {
+            console.log ("got trees", response.data.message);
+            this.setState({
+                trees: response.data.message
+            })
+        })
+        .catch(err => console.log('GET /trees/'))
     }
 
     addTree = userId => {
+        console.log ('Trees.js addTree', userId);
+
         this.setState({
             addTree: true
         })
+        // this.props.setTree(-2);
     }
 
-    showTree = () => {
+    handleSelect = (treeId) => {
+        console.log (`Tree.js handleSelect`, treeId);
 
-    }
+        const id = Number(treeId);
 
-    handleSelect = (userId, treeName) => {
-        console.log (`Tree ${treeName}/${userId} is selected`);
-
-        if (treeName.toLowerCase() === 'add tree') this.addTree(userId);
-        else this.showTree(userId, treeName);
+        if (id === -1) this.addTree(this.props.userId);
+        else {
+            this.props.clickHandler(treeId);
+        }
     }
 
     handleEdit = () => {
@@ -49,10 +68,22 @@ export default class Trees extends Component {
             console.log (el)
             setTimeout(() => {
                 el.style.display = 'block';
-            }, 2500);
+            }, 1500);
         }
 
         if (this.props.windowState.trees) {
+            const request = {
+                url: process.env.REACT_APP_BASE_URL + '/trees/' + this.props.userId,
+                method: "get"
+            }
+            axios(request)
+            .then((response) => {
+                console.log ("got trees", response.data.message);
+                this.setState({
+                    trees: response.data.message
+                })
+            })
+            .catch(err => console.log('GET /trees/'))
             turnOnDisplay();
         } else {
             const el = document.querySelector('.trees__content');
@@ -102,12 +133,30 @@ export default class Trees extends Component {
                         <img className={iconClassname} src={treeIcon} alt="tree" />
                     </div>
                     <div className={contentClassName}>
+                        {this.state.trees.map(tree => {
+                            console.log ('mapping tree', tree)
+                            return (
+                                <TreeCard
+                                    icon={tree.icon}
+                                    userName={userName}
+                                    userId={userId}
+                                    treeName={tree.tree_name}
+                                    treeId={tree.tree_id}
+                                    handleSelect={this.handleSelect}
+                                    key={tree.tree_name}
+                                    selected={Number(tree.tree_id) === this.props.selectedTree ? true : false}
+                                    />
+                            )
+                        })}
                         <TreeCard 
                             icon='/svg/octicons/plus-24.svg'
                             treeName="Add Tree"
                             userName={userName}
                             userId={userId}
-                            handleSelect={this.handleSelect}/>
+                            handleSelect={this.handleSelect}
+                            treeId='-1'
+                            selected={this.state.addTree}
+                            key="Add Tree"/>
                     </div>
                 </section>
                 {this.state.addTree && 
@@ -115,7 +164,7 @@ export default class Trees extends Component {
                         closeModal={this.closeModal}
                         userName={userName}
                         userId={userId}
-                        icon={process.env.REACT_APP_BASE_URL + '/svg/tree.svg'}
+                        icon={'/svg/tree.svg'}
                         iconList={this.props.iconList}/>
                 }
             </>
