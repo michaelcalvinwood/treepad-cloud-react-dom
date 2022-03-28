@@ -1,11 +1,10 @@
 @import '../../../styles/partials/variables.scss';
 
 .controls {
-    background-color: yellow;
+    background-color: white;
     position: fixed;
     top: 0;
     transition: all .25s;
-
     &--active {
         width: calc($treeWidth + $controlWidth);
         height: $controlHeight;
