@@ -1,0 +1,28 @@
+@import '../../../styles/partials/colors.scss';
+
+.control-card {
+    width: 5rem;
+    height: 5rem;
+    border: 1px solid black;
+    border-radius: 4px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    margin: 0 .5rem 0 .5rem;
+    background-color: $default-level-4;
+    cursor: pointer;
+    
+    &:hover {
+        background-color: $default-level-2;
+    }
+
+    &__icon {
+        height: 2rem;
+        width: 2rem;
+        display: block;
+        margin: .65rem auto .35rem auto;
+    }
+    &__line1, &__line2 {
+        text-align: center;
+        font-size: .75rem;
+        font-style: italic;
+    }
+}

@@ -1,10 +1,15 @@
 @import '../../../styles/partials/variables.scss';
+@import '../../../styles/partials/colors.scss';
 
 .controls {
-    background-color: white;
+    background-color: $default-background;
     position: fixed;
     top: 0;
     transition: all .25s;
+    padding: .5rem 1rem .5rem 1rem;
+    width: 100%;
+    box-sizing: border-box;
+
     &--active {
         width: calc($treeWidth + $controlWidth);
         height: $controlHeight;
@@ -29,6 +34,20 @@
         z-index: 2;
     }
 
+    &__logo {
+        position: absolute;
+        top: .5rem;
+        left: 1rem;
+        height: 3rem;
+    }
+    &__settings {
+        height: 1.25rem;
+        width: 1.25rem;
+        position: absolute;
+        top: .5rem;
+        right: .5rem;
+    }
+
     &__title-container {
         text-align: center;
     }
@@ -36,5 +55,26 @@
         width: 3rem;
 
     }
+
+    &__content {
+        margin: .5rem 0 0 0;
+        display: flex;
+        justify-content: space-between;
+    }
+    &__left {
+        display: flex;
+        justify-content: flex-start;
+    }
+    &__middle {
+        display: flex;
+        justify-content: flex-start;
+    }
+    &__right {
+        display: flex;
+        justify-content: flex-start;
+    }
+    
+
+
 
 }

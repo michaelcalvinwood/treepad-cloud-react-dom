@@ -1,7 +1,6 @@
 import './Branches.scss';
 import branchIcon from '../../../assets/icons/branch.svg';
 import React from 'react';
-import Axios from 'axios';
 import axios from 'axios';
 
 class Branches extends React.Component {
@@ -14,13 +13,16 @@ class Branches extends React.Component {
 
     state = {
       branches: [],
-      activeBranch: 1,
+      branchUpdateTs: 0,
+      activeBranch: 0,
       treeId: false,
       lastUpdate: 0,
     }
 
-    updateBranchName = (e, branchId) => {
-      console.log (`Update ${branchId}: ${e.target.value}`);
+    // input event handlers
+
+    handleInputChange = (e, branchId) => {
+      console.log (`Branches.js handleInputChange ${branchId}: ${e.target}`);
       const updatedBranches = this.state.branches.map(branch => {
         console.log (branch.branchId, branchId);
         if (branch.branchId === branchId) branch.name = e.target.value;
@@ -32,24 +34,218 @@ class Branches extends React.Component {
       })
     } 
 
-    displayBranchContent = () => {
-      if (this.state.branches === false) return (<></>);
+    handleInputKeyUp = (e, branchId) => {
+      console.log(`Branches.js handleInputKeyUp(${e}, ${branchId})`, e);
 
-      return (
-        this.state.branches.map(branch => {
-          let className = `branches__branch branches__branch-${branch.branchId} branches__branch--level-${branch.level}`
-          if (branch.status !== null) className += ` branches__branch--status-${branch.status}`;
-          if (Number(branch.branchId) === this.state.activeBranch) className += ' branches__branch--active';
-          return (
-            <div><input
-              className={className}
-              onChange={e => this.updateBranchName(e, branch.branchId)}
-              type='text'
-              value={branch.name === null ? '' : branch.name} />
-            </div>
-          )
+      switch (e.code.toLowerCase()) {
+        case 'enter':
+          if (e.shiftKey) {
+            this.insertChild(branchId);
+            return true;
+          }
+
+          if (e.ctrlKey) {
+            this.insertParent(branchId);
+            return true;
+          }
+
+          this.insertSibling(branchId);
+          return true;
+
+        default:
+          console.log ("Branches.js handleKeyUp", branchId, e.key, e.shiftKey)
+      }
+      
+    }
+    
+    handleInputFocus = (e, branchId) => {
+      console.log(`Branches.js handleInputFocus(${e}, ${branchId})`, e);
+
+      this.setState({
+        activeBranch: branchId
+      })
+    }
+
+    saveBranchName = (branchId, branchName) => {
+      console.log(`Branches.js saveBranchName(${branchId}, ${branchName})`);
+
+      const request = {
+        url: `${process.env.REACT_APP_BASE_URL}/branches/name/save/`,
+        method: "post", 
+        data: {
+          branchId: branchId,
+          branchName: branchName
+        }
+      }
+
+      axios(request)
+      .then(res => {
+
+      })
+      .catch(err => {
+        // TO DO reset branch.ts to 0 so we can try again later; and turn Save red
+      })
+    }
+
+    saveBranches = () => {
+      console.log(`Branches.js saveBranches thist.state.branches`, this.state.branches);
+
+      if (!this.state.branches.length) return false;
+      const curTime = Date.now();
+
+
+      const branchOrder = this.state.branches.map(branch => branch.status ? `${branch.branchId}:${branch.level}:${branch.status}` : `${branch.branchId}:${branch.level}`);
+      const branchNames = [];
+      for (let i = 0; i < this.state.branches.length; ++i) {
+        let branch = this.state.branches[i];
+        console.log(`Branches.js saveBranches i, branch, branch.ts, this.state.branchUpdateTs`, i, branch, branch.ts, this.state.branchUpdateTs);
+
+        if (branch.ts > this.state.branchUpdateTs) {
+          let id = branch.branchId;
+          let name = branch.name;
+          branchNames.push({id: id, name: name});
+          branch.ts = curTime;
+        }        
+      }
+
+      const request = {
+        url: `${process.env.REACT_APP_BASE_URL}/branches/order/save/${this.state.treeId}`,
+        method: "post",
+        data: {
+          branchOrder: JSON.stringify(branchOrder),
+        }
+      }
+      axios(request)
+      .then (res => {
+        console.log (`Branches.js saveBranches axios success`, res.data);
+      })
+      .catch(err => {
+        console.error (`Branches.js saveBranches axios error`, err);
+      })
+
+      branchNames.forEach(branch => this.saveBranchName(branch.id, branch.name));
+
+      this.setState({
+        branchUpdateTs: curTime
+      })
+
+    }
+
+    setBranchFocus = () => {
+      const target = `.branches__branch-${this.state.activeBranch}`;
+      const el = document.querySelector(target);
+
+      console.log(`Branches.js setBranchFocus`, target, el)
+
+      if (el) el.focus();
+    }
+
+
+
+    branchIdIndex = (arr, branchId) => {
+      for (let i = 0; i < arr.length; ++i) {
+        console.log(`Branches.js branchIdIndex compare ${arr[i].branchId}:${typeof arr[i].branchId} to ${branchId}:${typeof branchId}`)
+        if (arr[i].branchId === branchId) return i;
+      }
+      return false;
+    }
+
+    insertBranch = (branchId, relativeLevel) => {
+      let {userId, branchPool, setBranchPool} = this.props;
+
+      // TO DO: Handle branchPool.length === 0 here
+
+      console.log (`Branches.js insertBranch(${branchId}:${typeof branchId},${relativeLevel}:${typeof relativeLevel}) branchPool`, branchPool);
+
+      let modifiedBranches = [...this.state.branches];
+
+      const index = this.branchIdIndex(modifiedBranches, branchId);
+
+      if (index === false) {
+        console.error (`Branches.js insertBranch could not find ${branchId} of type ${typeof BranchId} in modifiedBranches`, modifiedBranches)
+        return false;
+      }
+
+      const desiredLevel = Number(modifiedBranches[index].level)+relativeLevel;
+
+      if (desiredLevel < 1 || desiredLevel > 5) return false;
+
+      console.log(`Branches.js insertBranch this.state.branches`, this.state.branches); 
+
+      const newBranchId = branchPool.shift().toString();
+
+      console.log(`Branches.js insertBranch newBranchId`, newBranchId)
+
+      // TO DO add check to see if newBranchId alread in use in case of race condition
+      // if in use then shift again.
+      
+      // setBranchPool assigns the current branchPool to state and removes the newBranchId from the users table in the database
+      setBranchPool(userId, branchPool, this.state.treeId, newBranchId)
+
+      // TO DO: if level + relativeLevel < 0 or > 5 then return false and do nothing
+      
+      const newBranch = {
+        branchId: newBranchId,
+        level: (Number(modifiedBranches[index].level)+relativeLevel).toString(),
+        status: relativeLevel > 0 ? 'o' : null,
+        name: null,
+        ts: Date.now()
+      }
+
+      modifiedBranches.splice(index+1, 0, newBranch);
+
+      console.log("Branches.js insertBranch modifiedBranches (after insertion)", modifiedBranches)
+
+      this.setState({
+        branches: modifiedBranches,
+        activeBranch: newBranchId
+      })
+
+    }
+
+    insertChild = (branchId = this.state.activeBranch) => {
+      this.insertBranch(branchId, 1);
+    }
+
+    insertSibling = (branchId = this.state.activeBranch) => {
+      this.insertBranch(branchId, 0);
+    }
+
+    insertParent = (branchId = this.state.activeBranch) => {
+      this.insertBranch(branchId, -1);
+    }
+
+
+
+    assignBranchName = (branchId, branchName) => {
+      console.log (`Branches.js assignBranchName (${branchId}, ${branchName})`);
+      const branches = [...this.state.branches];
+      let branch = branches.find(branch => branch.branchId === branchId);
+      if (branch) {
+        branch.name = branchName;
+        branch.ts = Date.now();
+
+        this.setState({
+          branches: branches
         })
-      )
+      }
+      console.log (`Branches.js assignBranchName branch`, branch);
+    }
+
+    getBranchName = branchId => {
+      const request = {
+        url: `${process.env.REACT_APP_BASE_URL}/branches/name/${branchId}`,
+        method: "get",
+      }
+
+      axios(request)
+      .then(res => {
+        console.log(`Branches.js getBranchName(${branchId} axios success)`, res.data.message[0]);
+        this.assignBranchName(res.data.message[0].branch_id.toString(), res.data.message[0].branch_name);
+      })
+      .catch(err => {
+
+      })
     }
 
     getBranches = treeId => {
@@ -68,11 +264,9 @@ class Branches extends React.Component {
 
           branch_order = JSON.parse(branch_order);
 
-          console.log ("branch order", typeof branch_order);
-          console.log ("treeId", tree_id);
+          const curTime = Date.now();
 
           let branches = branch_order.map(branch => {
-            console.log ('map branch', branch);
             let branchParts = branch.split(':');
             let item = {};
 
@@ -82,6 +276,7 @@ class Branches extends React.Component {
             else item.status = branchParts[2];
 
             item.name = null;
+            item.ts = curTime;
             return item
           });
 
@@ -89,11 +284,12 @@ class Branches extends React.Component {
 
           this.setState ({
             branches: branches,
-            activeBranch: 1,
+            activeBranch: branches.length ? Number(branches[0].branchId) : 0,
             treeId: tree_id,
             lastUpdate: Date.now()
           })
 
+          branches.forEach(branch => this.getBranchName(branch.branchId));
           
         })
         .catch(err => {
@@ -103,9 +299,33 @@ class Branches extends React.Component {
     }
 
     componentDidUpdate() {
-      const {treeId} = this.props;
+      const {treeId, controlState, controlHandler} = this.props;
 
-      console.log ("Branches componentDidUpdate: ", treeId, this.state.branches);
+      console.log(`Branches.js componentDidUpdate treeId, controlState, controlHandler`, treeId, controlState, controlHandler)
+
+      switch (controlState) {
+        case 'Insert-Sibling':
+          controlHandler(null);
+          this.insertSibling(this.state.activeBranch.toString());
+          break;
+        case 'Insert-Child':
+            controlHandler(null);
+            this.insertChild(this.state.activeBranch.toString());
+            break;
+        case 'Insert-Parent':
+          controlHandler(null);
+          this.insertParent(this.state.activeBranch.toString());
+          break;
+        case 'Save':
+          controlHandler(null);
+          this.saveBranches();
+          break;
+      }
+      
+
+      this.setBranchFocus(this.state.activeBranch);
+
+      console.log ("Branches.js componentDidUpdate treeId, this.state.branches ", treeId, this.state.branches);
 
       if (treeId <= 0) return;
 
@@ -114,7 +334,11 @@ class Branches extends React.Component {
     }
 
     componentDidMount() {
-      const {treeId} = this.props;
+      const {treeId, branchId} = this.props;
+
+      this.setState({
+        activeBranch: branchId
+      });
 
       console.log ("Branches did mount", treeId);
 
@@ -124,8 +348,38 @@ class Branches extends React.Component {
       
     }
 
+    // keyHandler = (key, e) => {
+    //   console.log ('key pressed', key, e);
+    // }
+
+    displayBranchContent = () => {
+      if (this.state.branches === false) return (<></>);
+
+      console.log(`Branches.js displayBranchContent`, this.state.branches);
+
+      return (
+        this.state.branches.map(branch => {
+          let className = `branches__branch branches__branch-${branch.branchId} branches__branch--level-${branch.level}`
+          if (branch.status !== null) className += ` branches__branch--status-${branch.status}`;
+          if (branch.branchId == this.state.activeBranch) className += ` branches__branch--active`;
+          if (Number(branch.branchId) === this.state.activeBranch) className += ' branches__branch--active';
+          return (
+            <div><input
+              className={className}
+              onChange={e => this.handleInputChange(e, branch.branchId)}
+              onKeyUp={e => this.handleInputKeyUp(e, branch.branchId)}
+              onFocus={e => this.handleInputFocus(e, branch.branchId)}
+              type='text'
+              value={branch.name === null ? '' : branch.name}/>
+            </div>
+          )
+        })
+      )
+    }
+
+
     render() {
-      const {windowState, clickHandler, treeId} = this.props;
+      const {windowState, clickHandler, treeId, linkIcon, branchPool} = this.props;
 
       console.group('Branches');
       console.log(windowState);
@@ -154,13 +408,18 @@ class Branches extends React.Component {
     return (
      
         <section className={mainClassName}>
+          <div>{`Branch Pool: ${branchPool}`}</div>
+          <div className='branches__branch-list'>{`Branch Order: ${JSON.stringify(this.state.branches)}`}</div>
+          <img className="branches__link" src={linkIcon} />
             <div 
               className={titleClassName}
               onClick={e => clickHandler(e, 'branches')} >
+                {/* {this.state.activeBranch} */}
+                
                 <img className="branches__icon" src={branchIcon} alt="branches" />
             </div>
             <div className={contentClassName}>
-              {this.displayBranchContent()}
+                {this.displayBranchContent()}
             </div>
                 
         </section>
