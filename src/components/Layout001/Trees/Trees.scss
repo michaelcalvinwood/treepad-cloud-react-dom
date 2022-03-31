@@ -1,11 +1,12 @@
 @import '../../../styles/partials/variables.scss';
+@import '../../../styles/partials/colors.scss';
 
 .trees {
     position: fixed;
     top: 0;
     height: 100vh;
     width: $treeWidth;
-    background-color: white;
+    background-color: $default-background;
     transition: all .25s;
     z-index: 1;
     left: 0;
@@ -25,12 +26,23 @@
 
     &__icon {
       width: 3rem;
+      margin: 1rem 0 0 0;
+      cursor: pointer;
 
       &--inactive {
         position: relative;
         top: 0;
         left: 0;
       }
+    }
+
+    &__link {
+      position: absolute;
+      top: .5rem;
+      right: .5rem;
+      height: 1.25rem;
+      width: 1.25rem;
+      cursor: pointer;
     }
 
     &__content {
@@ -46,25 +58,4 @@
         transition: all .5s;
       }
     }
-
-    
-    // &__title-container {
-    //     position: fixed;
-    //     top: .25rem;
-    //     left: 0;
-    //     font-size: 2rem;
-    //     transition: all .25s;
-    //     width: $treeWidth;
-        
-    //     &--active {
-    //         display: flex;
-    //         justify-content: center;
-    //         align-items: center;
-    //     }
-    //     &--inactive{
-    //     }
-    // }
-    // &__container {
-        
-    // }
 }

@@ -18,9 +18,9 @@ function TreeCard({icon, color, treeName, treeId, userId, userName, selected, ha
                 {treeName}</p>
             <p 
                 className="tree-card__user-name" >
-                {userName}</p>
+                {treeName !== `Add Tree` ? userName : ` `}</p>
         </div>
-            <div className = "tree-card__actions">
+            <div className={treeName !== `Add Tree` ? `tree-card__actions` : `tree-card__actions--disabled`}>
                 <img 
                     className="tree-card__edit" 
                     onClick={() => handleEdit(userId, treeName, treeId)}/>

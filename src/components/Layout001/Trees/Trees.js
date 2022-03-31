@@ -42,7 +42,7 @@ export default class Trees extends Component {
     }
 
     handleSelect = (treeId) => {
-        console.log (`Tree.js handleSelect`, treeId);
+        console.log (`Tree.js handleSelect(${treeId})`);
 
         const id = Number(treeId);
 
@@ -63,12 +63,11 @@ export default class Trees extends Component {
     componentDidMount() {
 
         const turnOnDisplay = () => {
-            console.log ("turn on display");
             const el = document.querySelector('.trees__content');
             console.log (el)
             setTimeout(() => {
                 el.style.display = 'block';
-            }, 1500);
+            }, 500);
         }
 
         if (this.props.windowState.trees) {
@@ -76,6 +75,7 @@ export default class Trees extends Component {
                 url: process.env.REACT_APP_BASE_URL + '/trees/' + this.props.userId,
                 method: "get"
             }
+            console.log(request.url);
             axios(request)
             .then((response) => {
                 console.log ("got trees", response.data.message);
@@ -93,9 +93,9 @@ export default class Trees extends Component {
     }
 
     render() {
-        const { windowState, clickHandler, userName, userId } = this.props;
+        const { windowState, iconClickHandler, clickHandler, userName, userId, linkIcon } = this.props;
         console.group ("Trees");
-        console.log ('Trees state, clickHandler', windowState, clickHandler);
+        console.log ('Trees state, clickHandler', windowState, clickHandler, iconClickHandler);
 
         let sectionClassName = 'trees';
         let titleClassName = 'trees__title';
@@ -127,9 +127,12 @@ export default class Trees extends Component {
         return (
             <>
                 <section className={sectionClassName}>
+                    <img className='trees__link' src={linkIcon}/>
+                   
+                        
                     <div 
                         className={titleClassName}
-                        onClick={e => clickHandler(e, 'trees')}>
+                        onClick={e => iconClickHandler(e, 'trees')}>
                         <img className={iconClassname} src={treeIcon} alt="tree" />
                     </div>
                     <div className={contentClassName}>

@@ -1,3 +1,5 @@
+@import '../../../styles/partials/colors.scss';
+
 .icon-card {
     width: 20%;
     
@@ -6,7 +8,7 @@
         display: flex;
     justify-content: center;
     align-items: center;
-        background-color: white;
+        background-color: $default-level-5;
         padding: .5rem;
         width: 90%;
         height: 3rem;
@@ -18,7 +20,7 @@
         border: 1px solid black;
 
         &:hover {
-            background-color: lightgreen;
+            background-color: $default-level-3;
         }
     }
 

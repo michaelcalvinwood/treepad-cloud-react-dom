@@ -1,7 +1,8 @@
 @import '../../../styles/partials/variables.scss';
+@import '../../../styles/partials/colors.scss';
 
 .branches {
-    background-color: white;
+    background-color: $default-background;
     position: fixed;
     bottom: 0;
     transition: all .25s;
@@ -51,7 +52,13 @@
         z-index: 5;
     }
     
-
+    &__link {
+        position: absolute;
+        top: .5rem;
+        right: .5rem;
+        height: 1.25rem;
+        cursor: pointer;
+      }
     &__title {
         text-align: center;
 
@@ -76,13 +83,44 @@
         border: none;
 
         &:hover {
-            background-color: aqua;
+            background-color: $default-background;
 
+        }
+        &:focus {
+            border: 2px solid black;
+        }
+
+        &--active {
+            border: 2px solid black;
         }
 
         &--level-1 {
-            background-color: green;
+            background-color: $default-level-1;
             padding: .5rem;
+            height: 2rem;
+            font-weight: 600;
+        }
+        &--level-2 {
+            background-color: $default-level-2;
+            padding: .5rem .5rem .5rem 2rem;
+            height: 2rem;
+            font-weight: 600;
+        }
+        &--level-3 {
+            background-color: $default-level-3;
+            padding: .5rem .5rem .5rem 4rem;
+            height: 2rem;
+            font-weight: 600;
+        }
+        &--level-4 {
+            background-color: $default-level-4;
+            padding: .5rem .5rem .5rem 6rem;
+            height: 2rem;
+            font-weight: 600;
+        }
+        &--level-5 {
+            background-color: $default-level-5;
+            padding: .5rem .5rem .5rem 8rem;
             height: 2rem;
             font-weight: 600;
         }
@@ -116,9 +154,13 @@
     // }
 
     &__content {
+        margin: .5rem 0 0 0;
 
         &--closed {
             display: none;
         }
+    }
+    &__branch-list {
+        word-wrap: break-word;
     }
 }

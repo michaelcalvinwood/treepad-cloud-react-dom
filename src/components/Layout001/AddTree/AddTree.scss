@@ -1,3 +1,5 @@
+@import '../../../styles/partials/colors.scss';
+
 .modal {
     position: fixed;
     top: 0;
@@ -20,6 +22,7 @@
         border-radius: 4px;
     }
     &__close {
+        background-color: $default-level-3;
         display: block;
         padding: .5rem;
         border-radius: 4px;
@@ -29,7 +32,7 @@
 }
 
 .add-tree {
-    background-color: #8fd9a3;
+    background-color: $default-level-1;
     width: 90vw;
     padding-bottom: 1rem;
     border-radius: 8px;
@@ -54,6 +57,7 @@
         margin: .5rem auto .5rem auto;
         box-sizing: border-box;
         border-radius: 4px;
+        background-color: $default-background;
 
         &::placeholder {
             color: light-grey;
@@ -67,6 +71,7 @@
         margin: .5rem auto .5rem auto;
         box-sizing: border-box;
         border-radius: 4px;
+        background-color: $default-background;
 
         &::placeholder {
             color: light-grey;
@@ -78,6 +83,8 @@
         padding: .5rem;
         border-radius: 4px;
         cursor: pointer;
+        background-color: $default-level-3;
+        
 
     }
 }

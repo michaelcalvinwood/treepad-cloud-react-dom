@@ -42,6 +42,7 @@ class App extends Component {
   
   componentDidMount() {
     window.addEventListener('resize', this.windowResize);
+    document.title="TreePad Cloud";
   }
 
   render () {
