@@ -22,7 +22,7 @@ import treePadIcon from '../../../assets/icons/treepadcloud-icon.svg';
 
 function Controls({ windowState, clickHandler, controlHandler }) {
     
-    console.log(windowState);
+    // console.log(windowState);
 
     let sectionClassName;
     let containerClassName;
@@ -46,14 +46,14 @@ function Controls({ windowState, clickHandler, controlHandler }) {
     return (
         <section className={sectionClassName}>
             {/* <img className='controls__logo' src={treePadIcon} /> */}
-            <div
+            {/* <div
                 className={containerClassName}>
                 <h1
                     className="controls__title"
                     onClick={e => clickHandler(e, 'controls')}>
                     <img className='controls__icon' src={controlsIcon} alt="controls" />
                 </h1>
-            </div>
+            </div> */}
             <div className={contentClassName}>
                 <div className="controls__left">
                     <ControlCard

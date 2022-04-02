@@ -48,32 +48,62 @@
     }
 
     &__title {
-        margin: 1rem 0 0 0;
-        text-align: center;
-
-        &--closed {
-            position: fixed;
-            width: 3rem;
-            right: 0;
-            top: $controlHeight;
-        }
-    }
-
-    &__link {
-        position: absolute;
-        top: .5rem;
-        right: .5rem;
-        height: 1.25rem;
+       display: flex;
+       align-items: center;
     }
     &__icon {
-        height: 4rem;
-
+        height: 2rem;
+    }
+    &__name {
+        font-size: 1.5rem;
+        font-weight: 600;
+        vertical-align: middle;
+    }
+    &__title-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 1rem 0 0 0;
     }
     &__quill {
-        height: calc($leaveHeight - 10rem);
+        height: calc($leaveHeight - 4rem);
         background-color: white;
     }
     &__content {
         margin: .5rem 0 0 0;
     }
+    &__landing-page {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    &__landing-page-container {
+        display: flex;
+        align-items: center;
+    }
+    &__landing-page-title {
+        font-size: 3rem;
+        margin: 0 0 0 1rem;
+    }
+    &__landing-page-icon {
+        height: 6rem;
+
+    }
+    &__link {
+        position: absolute;
+        top: .5rem;
+        left: .5rem;
+        height: .75rem;
+        cursor: pointer;
+      }
+    &__close {
+        position: absolute;
+        top: .5rem;
+        right: .5rem;
+        height: .75rem;
+        width: .75rem;
+        cursor: pointer;
+      }
 }

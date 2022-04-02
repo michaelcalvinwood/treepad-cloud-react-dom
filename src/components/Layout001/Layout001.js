@@ -6,37 +6,70 @@ import Controls from './Controls/Controls';
 import Branches from './Branches/Branches';
 import Leaves from './Leaves/Leaves';
 import '../../styles/fontawesome/css/all.css'
-import GetUser from './GetUser/GetUser';
 import iconList from '../../assets/data/svg-filenames.json';
 import axios from 'axios';
 import linkIcon from '../../assets/icons/cloud.svg'
-import editSectionIcon from '../../assets/icons/edit-section.svg';
+import closeIcon from '../../assets/icons/close.svg';
 
-class App extends Component {
+class Layout001 extends Component {
 
   state = {
-    userName: localStorage.getItem('userName') || false,
-    userId: localStorage.getItem('userId') || 2, // Important: Change to false after adding signup
     branchPool: [],
-    selectedTree: localStorage.getItem('selectedTree') || -2,
-    selectedBranch: localStorage.getItem('selectedBranch') || false,
-    controlState: null
+    branchId: 0,
+    treeId: -2,
+    controlState: null,
+    saveModule: false,
+    
+  }
+
+  getBranchPool = userId => {
+    const request = {
+        url: `${process.env.REACT_APP_BASE_URL}/branch-pool/${userId}`,
+        method: 'get',
+        headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+        }
+    }
+
+    axios(request)
+    .then(res => {
+        console.log (`Layout001.js getBranchPool(${userId}) axios response.data`, res.data.message[0]);
+        this.setBranchPool(res.data.message[0].user_id, JSON.parse(res.data.message[0].branch_pool));
+    })
+    .catch(err => {
+        console.error (`Layout001.js getBranchPool(${userId}) axios error`, err);
+    })
+  }
+
+  updateActiveModule = moduleId => {
+    this.setState({activeModule: moduleId});
+  }
+
+  updateActiveModuleType = (moduleName, moduleIcon) => {
+    this.setState({
+      activeModuleName: moduleName,
+      activeModuleIcon: moduleIcon
+    })
+  }
+
+  updateActiveModuleContent = content => {
+    this.setState({activeModuleContent: content})
   }
   
   controlHandler = type => {
     console.log(`Layout001.js controlHandler(${type})`);
-    this.setState({
-      controlState: type
-    })
-  }
+    if (type === null) {
+      this.setState({
+        controlState: null,
+      })
+      return;
+    }
 
-  setUser = (userId, userName) => {
+    const saveModule = type.toLowerCase() === 'save' ? true : false;
     this.setState({
-      userName: userName,
-      userId: userId
+      controlState: type,
+      saveModule: saveModule
     })
-
-    console.log ('Layou001 setUser', userName, userId);
   }
 
   addBranchToBranchPool = branchId => {
@@ -76,68 +109,72 @@ class App extends Component {
     console.log (`Layout001.js setTree(${treeId})`);
 
     this.setState({
-      selectedTree: treeId,
-      selectedBranch: false
+      treeId: treeId,
+      branchId: false
     })
   }
 
   setBranch = branchId => {
+    console.log(`Layout001.js setBranch (${branchId}:${typeof branchId})`);
     this.setState({
-      selectedBranch: branchId
+      branchId: branchId
     })
+  }
+
+  moduleSaved = () => {
+    this.setState({saveModule: false});
   }
 
   componentDidMount() {
     window.addEventListener('resize', this.windowResize);
+    this.getBranchPool(this.props.userId);
   }
 
   render () {
-    const {windowState, windowHeight, windowWidth, clickHandler,setTheTree} = this.props;
+    const {windowState, windowHeight, windowWidth, toggleWindow, setTheTree, userId, userName} = this.props;
 
-    console.log (`Layout001.js render() state`, this.state);
-
-    if (!this.state.userName || !this.state.userId) {
-      return (
-        <GetUser 
-          setUser={this.setUser}
-          setBranchPool={this.setBranchPool} />
-      )
-    }
+    console.log (`Layout001.js render()`);
 
     if (windowWidth > 768) {
       return (
         <div className="app">
           <Controls
             windowState={windowState}
-            clickHandler={clickHandler}
+            toggleWindow={toggleWindow}
             controlHandler={this.controlHandler}/>
           <Branches
             windowState={windowState}
-            clickHandler={clickHandler}
-            treeId={this.state.selectedTree}
-            branchId={this.state.selectedBranch}
+            toggleWindow={toggleWindow}
+            treeId={this.state.treeId}
+            branchId={this.state.branchId}
             branchPool={this.state.branchPool}
             setBranchPool={this.setBranchPool}
-            userId={this.state.userId}
+            setBranch={this.setBranch}
+            userId={userId}
             linkIcon={linkIcon}
-            editSectionIcon={editSectionIcon}
+            closeIcon={closeIcon}
             controlState={this.state.controlState}
-            controlHandler={this.controlHandler}/>
+            controlHandler={this.controlHandler}
+            moduleId={this.activeModule}
+            updateActiveModule={this.updateActiveModule}/>
           <Leaves 
             windowState={windowState}
-            clickHandler={clickHandler}
+            toggleWindow={toggleWindow}
             linkIcon={linkIcon}
-            editSectionIcon={editSectionIcon}/>
+            closeIcon={closeIcon}
+            branchId={this.state.branchId}
+            saveModule={this.state.saveModule}
+            moduleSaved={this.moduleSaved}/>
           <Trees 
             windowState={windowState}
-            iconClickHandler={clickHandler}
-            clickHandler={this.setTheTree}
-            userName={this.state.userName}
-            userId={this.state.userId}
+            icontoggleWindow={toggleWindow}
+            setTheTree={this.setTheTree}
+            userName={userName}
+            userId={userId}
             iconList={iconList}
-            selectedTree={this.state.selectedTree}
+            treeId={this.state.treeId}
             linkIcon={linkIcon}
-            editSectionIcon={editSectionIcon}/>
+            closeIcon={closeIcon}/>
           {/* <Modals modalName=''/> */}
         </div>
       )
@@ -150,4 +187,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default Layout001;

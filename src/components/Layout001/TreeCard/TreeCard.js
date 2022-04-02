@@ -2,7 +2,7 @@ import React from 'react';
 import './TreeCard.scss';
 
 function TreeCard({icon, color, treeName, treeId, userId, userName, selected, handleSelect, handleEdit, handleDelete}) {
-    console.log (process.env);
+    
     const iconPath = process.env.REACT_APP_BASE_URL + icon;
 
   return (

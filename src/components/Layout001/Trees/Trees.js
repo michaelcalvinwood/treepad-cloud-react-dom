@@ -20,7 +20,10 @@ export default class Trees extends Component {
 
         const request = {
             url: process.env.REACT_APP_BASE_URL + '/trees/' + this.props.userId,
-            method: "get"
+            method: "get",
+            headers: {
+                Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+            }
         }
         axios(request)
         .then((response) => {
@@ -48,7 +51,7 @@ export default class Trees extends Component {
 
         if (id === -1) this.addTree(this.props.userId);
         else {
-            this.props.clickHandler(treeId);
+            this.props.setTheTree(treeId);
         }
     }
 
@@ -73,7 +76,10 @@ export default class Trees extends Component {
         if (this.props.windowState.trees) {
             const request = {
                 url: process.env.REACT_APP_BASE_URL + '/trees/' + this.props.userId,
-                method: "get"
+                method: "get",
+                headers: {
+                    Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+                }
             }
             console.log(request.url);
             axios(request)
@@ -93,9 +99,8 @@ export default class Trees extends Component {
     }
 
     render() {
-        const { windowState, iconClickHandler, clickHandler, userName, userId, linkIcon } = this.props;
-        console.group ("Trees");
-        console.log ('Trees state, clickHandler', windowState, clickHandler, iconClickHandler);
+        const { windowState, iconClickHandler, setTheTree, userName, userId, linkIcon, closeIcon } = this.props;
+        console.log ('Trees.js render');
 
         let sectionClassName = 'trees';
         let titleClassName = 'trees__title';
@@ -122,22 +127,22 @@ export default class Trees extends Component {
             userName,
         }
 
-        console.log ("info", info)
+        // console.log ("info", info)
         
         return (
             <>
                 <section className={sectionClassName}>
                     <img className='trees__link' src={linkIcon}/>
+                    <img className='trees__close' src={closeIcon}/>
                    
                         
                     <div 
                         className={titleClassName}
                         onClick={e => iconClickHandler(e, 'trees')}>
-                        <img className={iconClassname} src={treeIcon} alt="tree" />
+                        {userName}
                     </div>
                     <div className={contentClassName}>
                         {this.state.trees.map(tree => {
-                            console.log ('mapping tree', tree)
                             return (
                                 <TreeCard
                                     icon={tree.icon}
@@ -147,7 +152,7 @@ export default class Trees extends Component {
                                     treeId={tree.tree_id}
                                     handleSelect={this.handleSelect}
                                     key={tree.tree_name}
-                                    selected={Number(tree.tree_id) === this.props.selectedTree ? true : false}
+                                    selected={Number(tree.tree_id) === this.props.treeId ? true : false}
                                     />
                             )
                         })}
