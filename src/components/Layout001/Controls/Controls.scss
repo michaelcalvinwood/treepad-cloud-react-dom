@@ -9,6 +9,9 @@
     padding: .5rem 1rem .5rem 1rem;
     width: 100%;
     box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
     &--active {
         width: calc($treeWidth + $controlWidth);
@@ -57,7 +60,8 @@
     }
 
     &__content {
-        margin: .5rem 0 0 0;
+        margin: 0 0 0 0;
+        width: 100%;
         display: flex;
         justify-content: space-between;
     }

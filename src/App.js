@@ -1,6 +1,7 @@
 import './App.scss';
 import { Component } from 'react';
 import Layout001 from './components/Layout001/Layout001';
+import GetUser from './components/GetUser/GetUser'
 
 // import Trees from './components/Trees/Trees';
 // import Controls from './components/Controls/Controls';
@@ -10,6 +11,12 @@ import Layout001 from './components/Layout001/Layout001';
 
 class App extends Component {
   state = {
+    userName: false,
+    userId: false,
+    deviceId: 0,
+    email: false,
+    password: false,
+    jwt: false,
     windowState: {
       trees: true,
       controls: true,
@@ -20,15 +27,26 @@ class App extends Component {
     windowWidth: window.innerWidth,
   }
 
-  clickHandler = (e, window) => {
-    console.group ('App clickHandler')
+  setUser = (userId, userName, jwt = 'public') => {
+    this.setState({
+      userName: userName,
+      userId: userId,
+      jwt: jwt
+    })
+
+    console.log ('App.js setUser', userName, userId);
+  }
+  
+
+  toggleWindow = (e, window) => {
+    
     let windowState = this.state.windowState;
     windowState[window] = !windowState[window]; 
     console.log (window, windowState);
     this.setState({
       windowState: windowState,
     })
-    console.groupEnd();
+    
   }
 
   windowResize = () => {
@@ -46,15 +64,28 @@ class App extends Component {
   }
 
   render () {
+    console.log('App.js render', 'this.state.userName', this.state.userName, 'this.state.userId', this.state.userId);
+    if (!this.state.userName || !this.state.userId) {
+      return (
+        <GetUser 
+          setUser={this.setUser}
+          setBranchPool={this.setBranchPool} />
+      )
+    }
+
     if (this.state.windowWidth > 768) {
       return (
         <Layout001 
           windowState={this.state.windowState} 
           windowHeight={this.state.windowHeight}
           windowWidth={this.state.windowWidth}
-          clickHandler={this.clickHandler}/>
+          toggleWindow={this.toggleWindow}
+          userName={this.state.userName}
+          userId={this.state.userId}
+          jwt={this.state.jwt} />
       )
     }
+
     return (
       <div>
         {this.state.windowWidth})

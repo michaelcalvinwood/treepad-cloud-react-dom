@@ -34,6 +34,9 @@ export class AddTree extends Component {
         userId: this.props.userId,
         treeName: this.state.treeName,
         treeDesc: this.state.treeDesc
+      },
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
       }
     }
 

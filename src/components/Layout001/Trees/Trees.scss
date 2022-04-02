@@ -20,8 +20,11 @@
     }
 
     &__title {
-      margin-top: 1rem;
+      margin-top: 1.5rem;
       text-align: center;
+      font-style: italic;
+      font-size: .75rem;
+      color: $default-level-1;
     }
 
     &__icon {
@@ -39,12 +42,18 @@
     &__link {
       position: absolute;
       top: .5rem;
-      right: .5rem;
-      height: 1.25rem;
-      width: 1.25rem;
+      left: .5rem;
+      height: .75rem;
       cursor: pointer;
     }
-
+    &__close {
+      position: absolute;
+      top: .5rem;
+      right: .5rem;
+      height: .75rem;
+      width: .75rem;
+      cursor: pointer;
+    }
     &__content {
       transition: all .5s;
       opacity: 1;
