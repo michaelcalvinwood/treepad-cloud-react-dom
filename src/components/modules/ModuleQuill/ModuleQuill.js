@@ -5,13 +5,19 @@ import ReactQuill, { Quill } from 'react-quill';
 export class ModuleQuill extends Component {
 
   componentDidMount() {
-    this.props.setContent('<p>Hello <b>content</b></p>')
+    
+  }
+
+  saveFormattedContent = content => {
+    const contentArray = [];
+    contentArray.push(content);
+    this.props.setContent(contentArray);
   }
 
   render() {
     let {content} = this.props;
-
-    if (!content) content = '';
+    if (!content.length) content = '';
+    else content = content[0];
 
     console.log('ModuleQuill.js render', 'content', content);
 
@@ -34,7 +40,7 @@ export class ModuleQuill extends Component {
         id="react-quill"
         className="leaves__quill" 
         value={content}
-        onChange={this.props.setContent}
+        onChange={this.saveFormattedContent}
         modules={modules} 
         theme="snow"/>
     )

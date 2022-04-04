@@ -36,9 +36,14 @@ class App extends Component {
 
     console.log ('App.js setUser', userName, userId);
   }
+
+  setWindowState = windowState => {
+    this.setState({windowState: windowState});
+  }
   
 
   toggleWindow = (e, window) => {
+    console.log(`App.js toggleWindow ${window}`);
     
     let windowState = this.state.windowState;
     windowState[window] = !windowState[window]; 
@@ -82,7 +87,8 @@ class App extends Component {
           toggleWindow={this.toggleWindow}
           userName={this.state.userName}
           userId={this.state.userId}
-          jwt={this.state.jwt} />
+          jwt={this.state.jwt}
+          setWindowState={this.setWindowState} />
       )
     }
 

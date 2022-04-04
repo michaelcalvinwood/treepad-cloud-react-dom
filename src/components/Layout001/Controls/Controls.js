@@ -1,5 +1,4 @@
 import './Controls.scss';
-import controlsIcon from '../../../assets/icons/controls.svg';
 import ControlCard from '../ControlCard/ControlCard';
 
 import insertSiblingIcon from '../../../assets/icons/insert-sibling.svg';
@@ -20,10 +19,7 @@ import settingsIcon from '../../../assets/icons/settings.svg';
 import treePadIcon from '../../../assets/icons/treepadcloud-icon.svg';
 
 
-function Controls({ windowState, clickHandler, controlHandler }) {
-    
-    // console.log(windowState);
-
+function Controls({ windowState, clickHandler, controlHandler, toggleWindow, linkIcon, closeIcon }) {
     let sectionClassName;
     let containerClassName;
     let contentClassName = "controls__content";
@@ -32,7 +28,7 @@ function Controls({ windowState, clickHandler, controlHandler }) {
         sectionClassName = 'controls controls--active';
         containerClassName = 'controls__title-container controls__title-container--active'
     } else {
-        sectionClassName = 'controls controls--inactive';
+        sectionClassName = 'controls controls--inactive ';
         containerClassName = 'controls__title-container controls__title-container--inactive';
         contentClassName += " controls__content--inactive"
     }
@@ -41,19 +37,19 @@ function Controls({ windowState, clickHandler, controlHandler }) {
         sectionClassName += '-trees';
         containerClassName += '-trees';
     }
-
-    console.groupEnd();
     return (
         <section className={sectionClassName}>
-            {/* <img className='controls__logo' src={treePadIcon} /> */}
-            {/* <div
-                className={containerClassName}>
-                <h1
-                    className="controls__title"
-                    onClick={e => clickHandler(e, 'controls')}>
-                    <img className='controls__icon' src={controlsIcon} alt="controls" />
-                </h1>
-            </div> */}
+            <img 
+                className="controls__close" 
+                src={closeIcon}
+                onClick={e => toggleWindow(e, 'controls')} />
+
+            <div className='controls__logo-container'>
+                <div className='controls__logo'>
+                    <img className='controls__logo-icon' src={treePadIcon} />
+                    <h1 className='controls__logo-title'>TreePad Cloud</h1>  
+                </div>
+            </div>
             <div className={contentClassName}>
                 <div className="controls__left">
                     <ControlCard

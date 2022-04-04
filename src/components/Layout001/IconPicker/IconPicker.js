@@ -37,7 +37,6 @@ export class IconPicker extends Component {
     }
 
     componentDidMount() {
-        console.log ("IconPicker did mount", this.state.filteredList, this.state.search, this.props.iconList)
         if (!this.state.filteredList.length && !this.state.search) {
             this.setState({filteredList: this.props.iconList});
         }
