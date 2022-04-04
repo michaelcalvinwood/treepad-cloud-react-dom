@@ -10,6 +10,7 @@ import iconList from '../../assets/data/svg-filenames.json';
 import axios from 'axios';
 import linkIcon from '../../assets/icons/cloud.svg'
 import closeIcon from '../../assets/icons/close.svg';
+import IconDocker from './IconDocker/IconDocker';
 
 class Layout001 extends Component {
 
@@ -19,8 +20,12 @@ class Layout001 extends Component {
     treeId: -2,
     controlState: null,
     saveModule: false,
-    
+    moduleId: 0,
+    moduleName: '',
+    moduleIcon: '',
+    moduleContent: []
   }
+
 
   getBranchPool = userId => {
     const request = {
@@ -33,12 +38,29 @@ class Layout001 extends Component {
 
     axios(request)
     .then(res => {
+        console.clear();
         console.log (`Layout001.js getBranchPool(${userId}) axios response.data`, res.data.message[0]);
         this.setBranchPool(res.data.message[0].user_id, JSON.parse(res.data.message[0].branch_pool));
     })
     .catch(err => {
         console.error (`Layout001.js getBranchPool(${userId}) axios error`, err);
     })
+  }
+
+  updateModuleId = moduleId => {
+    this.setState({moduleId: moduleId})
+  }
+
+  updateModuleName = moduleName => {
+    this.setState({moduleName: moduleName})
+  }
+
+  updateModuleIcon = moduleIcon => {
+    this.setState({moduleIcon: moduleIcon})
+  }
+
+  updateModuleContent = moduleContent => {
+    this.setState({moduleContent: moduleContent})
   }
 
   updateActiveModule = moduleId => {
@@ -56,16 +78,41 @@ class Layout001 extends Component {
     this.setState({activeModuleContent: content})
   }
   
-  controlHandler = type => {
-    console.log(`Layout001.js controlHandler(${type})`);
-    if (type === null) {
-      this.setState({
-        controlState: null,
-      })
-      return;
+  saveModuleContentSync = (branchId) => {
+    const {moduleName, moduleContent} = this.state;
+    console.log('Leaves.js saveModuleContentSync', branchId, moduleName, moduleContent);
+
+    if (!moduleName) return;
+
+    const request = {
+      url: `${process.env.REACT_APP_BASE_URL}/modules/${moduleName}/${branchId}`,
+      method: 'post',
+      data: {
+        content: JSON.stringify(moduleContent)
+      },
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+      }
     }
 
-    const saveModule = type.toLowerCase() === 'save' ? true : false;
+    axios(request)
+    .then(res => {
+      console.log('Leaves.js saveModuleContent axios', res.data);
+    })
+    .catch(err => {
+      console.error('Leaves.js saveModuleContent axios', err);
+    })
+
+  }
+
+  controlHandler = type => {
+    console.log(`Layout001.js controlHandler(${type})`);
+    
+    let saveModule;
+
+    if (type === null) saveModule = false;
+    else saveModule = type.toLowerCase() === 'save' ? true : false;
+    
     this.setState({
       controlState: type,
       saveModule: saveModule
@@ -91,7 +138,10 @@ class Layout001 extends Component {
     if (removedBranch) {
       const request = {
         url: `${process.env.REACT_APP_BASE_URL}/branch-pool/${userId}/${treeId}/${removedBranch}`,
-        method: 'delete'
+        method: 'delete',
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+        }
       }
       axios(request)
       .then(res => {
@@ -114,7 +164,7 @@ class Layout001 extends Component {
     })
   }
 
-  setBranch = branchId => {
+  setBranch = (branchId) => {
     console.log(`Layout001.js setBranch (${branchId}:${typeof branchId})`);
     this.setState({
       branchId: branchId
@@ -131,7 +181,7 @@ class Layout001 extends Component {
   }
 
   render () {
-    const {windowState, windowHeight, windowWidth, toggleWindow, setTheTree, userId, userName} = this.props;
+    const {windowState, windowHeight, windowWidth, toggleWindow, setWindowState, setTheTree, userId, userName} = this.props;
 
     console.log (`Layout001.js render()`);
 
@@ -141,6 +191,8 @@ class Layout001 extends Component {
           <Controls
             windowState={windowState}
             toggleWindow={toggleWindow}
+            linkIcon={linkIcon}
+            closeIcon={closeIcon}
             controlHandler={this.controlHandler}/>
           <Branches
             windowState={windowState}
@@ -156,7 +208,8 @@ class Layout001 extends Component {
             controlState={this.state.controlState}
             controlHandler={this.controlHandler}
             moduleId={this.activeModule}
-            updateActiveModule={this.updateActiveModule}/>
+            updateActiveModule={this.updateActiveModule}
+            saveModuleContentSync={this.saveModuleContentSync}/>
           <Leaves 
             windowState={windowState}
             toggleWindow={toggleWindow}
@@ -164,10 +217,19 @@ class Layout001 extends Component {
             closeIcon={closeIcon}
             branchId={this.state.branchId}
             saveModule={this.state.saveModule}
-            moduleSaved={this.moduleSaved}/>
+            moduleSaved={this.moduleSaved}
+            userId={userId}
+            moduleId={this.state.moduleId}
+            moduleName={this.state.moduleName}
+            moduleIcon={this.state.moduleIcon}
+            moduleContent={this.state.moduleContent}
+            updateModuleId={this.updateModuleId}
+            updateModuleName={this.updateModuleName}
+            updateModuleIcon={this.updateModuleIcon}
+            updateModuleContent={this.updateModuleContent}/>
           <Trees 
             windowState={windowState}
-            icontoggleWindow={toggleWindow}
+            toggleWindow={toggleWindow}
             setTheTree={this.setTheTree}
             userName={userName}
             userId={userId}
@@ -175,7 +237,10 @@ class Layout001 extends Component {
             treeId={this.state.treeId}
             linkIcon={linkIcon}
             closeIcon={closeIcon}/>
-          {/* <Modals modalName=''/> */}
+          <IconDocker
+            windowState={windowState}
+            setWindowState={setWindowState}
+            />
         </div>
       )
     }

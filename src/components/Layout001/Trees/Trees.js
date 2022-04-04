@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import './Trees.scss'
-import treeIcon from '../../../assets/icons/tree.svg';
 import TreeCard from '../TreeCard/TreeCard';
 import AddTree from '../AddTree/AddTree';
 import axios from 'axios';
@@ -99,7 +98,7 @@ export default class Trees extends Component {
     }
 
     render() {
-        const { windowState, iconClickHandler, setTheTree, userName, userId, linkIcon, closeIcon } = this.props;
+        const { windowState, toggleWindow, setTheTree, userName, userId, linkIcon, closeIcon } = this.props;
         console.log ('Trees.js render');
 
         let sectionClassName = 'trees';
@@ -133,12 +132,13 @@ export default class Trees extends Component {
             <>
                 <section className={sectionClassName}>
                     <img className='trees__link' src={linkIcon}/>
-                    <img className='trees__close' src={closeIcon}/>
-                   
-                        
+                    <img 
+                        className='trees__close'
+                        onClick={e => toggleWindow(e, 'trees')}
+                        src={closeIcon}/>            
                     <div 
                         className={titleClassName}
-                        onClick={e => iconClickHandler(e, 'trees')}>
+                        >
                         {userName}
                     </div>
                     <div className={contentClassName}>

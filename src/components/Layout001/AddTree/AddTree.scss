@@ -1,12 +1,13 @@
 @import '../../../styles/partials/colors.scss';
 
 .add-tree {
-    background-color: $default-level-3;
+    background-color: $default-level-4;
     width: 90vw;
     padding-bottom: 1rem;
     border-radius: 8px;
     border: 1px solid black;
-        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    border-radius: 4px;
 
 
     &__icon {
@@ -53,8 +54,6 @@
         border-radius: 4px;
         cursor: pointer;
         color: $default-background;
-        background-color: $default-level-1;
-        
-
+        background-color: #000000;
     }
 }
