@@ -531,8 +531,8 @@ class Branches extends React.Component {
     return (
         <section className={mainClassName}>
           {/* debug */}
-          <div>{`Branch Pool: ${branchPool}`}</div>
-          <div className='branches__branch-list'>{`Branch Order: ${JSON.stringify(this.state.branches)}`}</div>
+          {/* <div>{`Branch Pool: ${branchPool}`}</div>
+          <div className='branches__branch-list'>{`Branch Order: ${JSON.stringify(this.state.branches)}`}</div> */}
 
           <img className="branches__link" src={linkIcon} />
           <img 
