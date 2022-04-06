@@ -1,0 +1,83 @@
+@import '../../../styles/partials/variables.scss';
+@import '../../../styles/partials/colors.scss';
+
+.trees {
+    position: fixed;
+    top: 0;
+    height: 100vh;
+    width: $treeWidth;
+    background-color: $default-background;
+    transition: all .25s;
+    z-index: 1;
+    left: 0;
+    border-right: 1px solid black;
+    overflow-y: auto;
+    overflow-x: hidden;
+        &::-webkit-scrollbar {
+            width: 12px;
+        }
+        
+        &::-webkit-scrollbar-track {
+            -webkit-box-shadow: inset 0 0 6px     rgba(0,0,0,0.3); 
+            border-radius: 10px;
+        }
+        
+        &::-webkit-scrollbar-thumb {
+            border-radius: 10px;
+            -webkit-box-shadow: inset 0 0 6px     rgba(0,0,0,0.5); 
+        }
+
+    &--active {
+      
+    }
+    &--inactive {
+      width: 0;
+      display:none;
+    }
+    &__title {
+      margin-top: 1.5rem;
+      text-align: center;
+      font-style: italic;
+      font-size: .75rem;
+      color: $default-level-1;
+    }
+    &__icon {
+      width: 3rem;
+      margin: 1rem 0 0 0;
+      cursor: pointer;
+
+      &--inactive {
+        position: relative;
+        top: 0;
+        left: 0;
+      }
+    }
+    &__link {
+      position: absolute;
+      top: .5rem;
+      left: .5rem;
+      height: .75rem;
+      cursor: pointer;
+    }
+    &__close {
+      position: absolute;
+      top: .5rem;
+      right: .5rem;
+      height: .75rem;
+      width: .75rem;
+      cursor: pointer;
+    }
+    &__content {
+      transition: all .5s;
+      opacity: 1;
+      display: none;
+      overflow-y: auto;
+      height: calc(100vh - 4rem);
+
+      &--inactive {
+        opacity: 0;
+        display: none;
+        transition: all .5s;
+      }
+    }
+}

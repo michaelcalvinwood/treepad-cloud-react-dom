@@ -1,0 +1,126 @@
+@import '../../../styles/partials/variables.scss';
+@import '../../../styles/partials/colors.scss';
+
+.leaves {
+    position: fixed;
+    right: 0;
+    background-color: $default-background;
+    transition: all .25s;
+    
+    border-left: 1px solid black;
+    border-top: 1px solid black;
+
+    &--active-trees-branches-leaves-controls {
+        height: $leaveHeight;
+        width: $leaveWidth;
+        bottom: 0;
+    }
+    &--active-trees-leaves-controls{
+        height: $leaveHeight;
+        width: calc($branchWidth + $leaveWidth);
+        top: $controlHeight;
+    }
+    &--active-leaves-controls {
+        height: $leaveHeight;
+        width: calc($treeWidth + $branchWidth + $leaveWidth);
+        top: $controlHeight;
+    }
+    &--active-branches-leaves-controls {
+        height: $leaveHeight;
+        width: $leaveWidth;
+        bottom: 0;
+    }
+    &--active-branches-leaves {
+        height: 100vh;
+        top: 0;
+        width: $leaveWidth;
+    }
+    &--active-trees-branches-controls {
+        top: $controlHeight;
+        width: 1rem;
+        height: 0;
+    }    
+    &--active-trees-leaves {
+        top: 0;
+        height: 100vw;
+        width: calc($branchWidth + $leaveWidth);
+    }
+    &--active-leaves {
+        height: 100vh;
+        width: 100vw;
+        top: 0;
+        left: 0;
+    }
+    &--active-trees-branches-leaves {
+        height: 100vh;
+        width: $leaveWidth;
+        top: 0;
+    }
+
+    &__title {
+       display: flex;
+       align-items: center;
+       cursor: pointer;
+    }
+    &__default-title {
+        text-align: center;
+        font-weight: 600;
+        margin: 0 0 1rem 0;
+    }
+    &__icon {
+        height: 2rem;
+    }
+    &__name {
+        font-size: 1.5rem;
+        font-weight: 600;
+        vertical-align: middle;
+        margin: 0 0 0 .5rem;
+    }
+    &__title-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 1rem 0 0 0;
+    }
+    &__quill {
+        height: calc($leaveHeight - 4rem);
+        background-color: white;
+    }
+    &__content {
+        margin: .5rem 0 0 0;
+    }
+    &__landing-page {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    &__landing-page-container {
+        display: flex;
+        align-items: center;
+    }
+    &__landing-page-title {
+        font-size: 3rem;
+        margin: 0 0 0 1rem;
+    }
+    &__landing-page-icon {
+        height: 6rem;
+
+    }
+    &__link {
+        position: absolute;
+        top: .5rem;
+        left: .5rem;
+        height: .75rem;
+        cursor: pointer;
+      }
+    &__close {
+        position: absolute;
+        top: .5rem;
+        right: .5rem;
+        height: .75rem;
+        width: .75rem;
+        cursor: pointer;
+      }
+}

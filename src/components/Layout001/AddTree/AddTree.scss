@@ -1,0 +1,58 @@
+@import '../../../styles/partials/colors.scss';
+
+.add-tree {
+    background-color: $default-level-4;
+    width: 90vw;
+    padding-bottom: 1rem;
+    border-radius: 8px;
+    border: 1px solid black;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    border-radius: 4px;
+
+    &__icon {
+        display: block;
+        text-align: center;
+        height: 8rem;
+        width: 8rem;
+        border-radius: 4px;
+        padding-top: 1rem;
+        margin: auto;
+    }
+    &__tree-name {
+        width: 30vw;
+        height: 2rem;
+        padding: .5rem;
+        display: block;
+        margin: .5rem auto .5rem auto;
+        box-sizing: border-box;
+        border-radius: 4px;
+        background-color: $default-background;
+
+        &::placeholder {
+            color: $placeholder-color;
+        }
+    }
+    &__tree-desc {
+        display: block;
+        width: 30vw;
+        height: 5rem;
+        padding: .5rem;
+        margin: .5rem auto .5rem auto;
+        box-sizing: border-box;
+        border-radius: 4px;
+        background-color: $default-background;
+
+        &::placeholder {
+            color: $placeholder-color;
+        }
+    }
+    &__create {
+        display: block;
+        margin: auto;
+        padding: .5rem;
+        border-radius: 4px;
+        cursor: pointer;
+        color: $default-background;
+        background-color: #000000;
+    }
+}

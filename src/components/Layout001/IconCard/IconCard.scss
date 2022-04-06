@@ -1,0 +1,26 @@
+@import '../../../styles/partials/colors.scss';
+
+.icon-card {
+    width: 20%;
+    
+    &__name {
+        display: flex;
+    justify-content: center;
+    align-items: center;
+        background-color: $default-level-5;
+        padding: .5rem;
+        width: 90%;
+        height: 3rem;
+        margin: 0 0 .5rem 0;
+        border-radius: 4px;
+        text-align: center;
+        cursor: pointer;
+        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+        border: 1px solid black;
+
+        &:hover {
+            background-color: $default-level-3;
+        }
+    }
+
+}

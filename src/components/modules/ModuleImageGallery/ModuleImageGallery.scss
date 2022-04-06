@@ -1,0 +1,61 @@
+@import '../../../styles/partials/variables.scss';
+@import '../../../styles/partials/colors.scss';
+
+.module-image-gallery {
+    &__dropzone-container {
+        height: 100%;
+        width: 100%;
+    }
+    &__dropzone {
+        border: 2px solid $default-level-1;
+        height: calc( ($leaveHeight - 9rem) * .70);
+        border-radius: 8px;
+        padding: 1rem;
+        overflow-y: auto;
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+       
+        
+    }
+    &__actions {
+        width: 100%;
+        display: flex;
+        justify-content: space-around;
+    }
+    &__action-card {
+        width: 30%;
+        border: 1px solid black;
+        border-radius: 4px;
+        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        background-color: $default-level-4;
+        cursor: pointer;
+
+        &--active {
+            background-color: $default-level-2;
+        }
+    }
+    &__action-image {
+        height: 2rem;
+        width: 2rem;
+        margin: auto;
+    }
+    &__action-title {
+        text-align: center;
+        margin: .5rem 0 .5rem 0;
+        font-size: .75rem;
+        font-style: italic;
+    }
+    &__work-space {
+        height: calc($leaveHeight - 9rem);
+        width: $leaveWidth;
+        height: 100%;
+        width: 100%;
+        box-sizing: border-box;
+        padding: 1rem;
+        overflow-y: auto;
+    }
+}

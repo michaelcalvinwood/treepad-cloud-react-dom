@@ -1,0 +1,27 @@
+@import '../../../styles/partials/variables.scss';
+@import '../../../styles/partials/colors.scss';
+
+.icon-docker {
+    position: fixed;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    top: 0;
+    left: $treeWidth;
+    background-color: $default-level-4;
+    border: 1px solid black;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+
+    &--shift-left {
+        left: 0;
+    }
+    &__tree-icon, &__branches-icon, &__controls-icon {
+        height: 1rem;
+        margin: 0 .5rem 0 .5rem;
+        cursor: pointer;
+
+        &--disabled {
+            display: none;
+        }
+    }
+}

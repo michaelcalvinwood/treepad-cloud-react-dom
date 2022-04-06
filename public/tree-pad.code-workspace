@@ -1,0 +1,23 @@
+{
+	"folders": [
+		{
+			"name": "treepad-cloud-react-dom",
+			"path": ".."
+		},
+		{
+			"name": "treepad-cloud-node-express",
+			"path": "../../treepad-cloud-node-express"
+		},
+		{
+			"name": "knex-crud",
+			"path": "../../brainstation/code/knex-crud"
+		},
+		{
+			"path": "../../brainstation/code/pair-programming"
+		},
+		{
+			"path": "../../brainstation/code/Instock-Ariel"
+		}
+	],
+	"settings": {}
+}

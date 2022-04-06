@@ -1,0 +1,83 @@
+@import '../../../styles/partials/variables.scss';
+@import '../../../styles/partials/colors.scss';
+
+.image-mover {
+    position: relative;
+    width: calc(($leaveWidth / 4) - 2rem);
+    height: calc((($leaveWidth / 4) - 2rem) * .60);
+    margin: 1rem;
+
+    &--inactive {
+        display: none;
+    }
+    
+    &__image {
+        height: 100%;
+        width: 100%;
+        border-radius: 4px;
+    }
+    &__up {
+        cursor: pointer;
+        height: 1.5rem;
+        width: 1.5rem;
+        border-radius: 1.5rem;
+        background-color: $default-level-4;
+        position: absolute;
+        top: 4px;
+        left: calc((($leaveWidth / 4) - 2rem) / 2 - .75rem);
+        opacity: .75;
+
+        &:hover {
+            background-color: $default-level-2;
+            opacity: 1;
+        }
+    }
+    &__down {
+        cursor: pointer;
+        height: 1.5rem;
+        width: 1.5rem;
+        border-radius: 1.5rem;
+        background-color: $default-level-4;
+        position: absolute;
+        bottom: 4px;
+        left: calc((($leaveWidth / 4) - 2rem) / 2 - .75rem);
+        opacity: .75;
+
+        &:hover {
+            background-color: $default-level-2;
+            opacity: 1;
+        }
+    }
+    &__left {
+        cursor: pointer;
+        height: 1.5rem;
+        width: 1.5rem;
+        border-radius: 1.5rem;
+        background-color: $default-level-4;
+        position: absolute;
+        left: 4px;
+        top: calc(((($leaveWidth / 4) - 2rem) * .60) / 2 - .75rem) ;
+        opacity: .75;
+
+        &:hover {
+            background-color: $default-level-2;
+            opacity: 1;
+        }
+    }
+    &__right {
+        cursor: pointer;
+        height: 1.5rem;
+        width: 1.5rem;
+        border-radius: 1.5rem;
+        background-color: $default-level-4;
+        position: absolute;
+        right: 4px;
+        top: calc(((($leaveWidth / 4) - 2rem) * .60) / 2 - .75rem) ;
+        opacity: .75;
+        
+        &:hover {
+            background-color: $default-level-2;
+            opacity: 1;
+        }
+    }
+}
