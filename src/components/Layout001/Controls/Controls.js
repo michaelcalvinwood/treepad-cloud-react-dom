@@ -30,7 +30,8 @@ class Controls extends React.Component {
     }
 
     render() {
-        const { windowState, clickHandler, controlHandler, toggleWindow, linkIcon, closeIcon, branchHasChanged, moduleHasChanged } = this.props;
+        const { windowState, clickHandler, controlHandler, toggleWindow, linkIcon, closeIcon, branchHasChanged, moduleHasChanged, view, viewTreeName, viewTreeIcon } = this.props;
+
         let sectionClassName;
         let containerClassName;
         let contentClassName = "controls__content";
@@ -47,6 +48,17 @@ class Controls extends React.Component {
         if (windowState.trees) {
             sectionClassName += '-trees';
             containerClassName += '-trees';
+        }
+
+        if (view !== 'userView') {
+            return (
+                <section className={sectionClassName}>
+                    <div className="controls__view-container">
+                        <img className="controls__view-icon" src={viewTreeIcon} alt='tree' />
+                        <p className="controls__view-name">{viewTreeName}</p>
+                    </div>
+                </section>
+            )
         }
         return (
             <section className={sectionClassName}>

@@ -197,17 +197,17 @@ class Layout001 extends Component {
   }
 
   componentDidUpdate() {
-    const {viewTreeId, viewBranchId} = this.props;
+    const {viewTreeId, viewBranchId, isAllowed} = this.props;
     if (viewTreeId && viewTreeId !== this.state.treeId) {
       this.setTheTree(viewTreeId);
     }
     if (viewBranchId && viewBranchId !== this.state.branchId) {
-      this.setBranch(viewBranchId);
+      if (!isAllowed(this.state.branchId)) this.setBranch(viewBranchId);
     }
   }
 
   componentDidMount() {
-    const {viewTreeId, viewBranchId} = this.props;
+    const {viewTreeId, viewBranchId, isAllowed} = this.props;
 
     window.addEventListener('resize', this.windowResize);
     window.addEventListener('keyup', this.handleKeyUp);
@@ -216,12 +216,12 @@ class Layout001 extends Component {
       this.setTheTree(viewTreeId);
     }
     if (viewBranchId && viewBranchId !== this.state.branchId) {
-      this.setBranch(viewBranchId);
+      if (!isAllowed(this.state.branchId)) this.setBranch(viewBranchId);
     }
   }
 
   render () {
-    const {windowState, windowHeight, windowWidth, toggleWindow, setWindowState, setTheTree, userId, userName, view} = this.props;
+    const {windowState, windowHeight, windowWidth, toggleWindow, setWindowState, setTheTree, userId, userName, view, isAllowed, viewTreeName, viewTreeIcon} = this.props;
 
     if (windowWidth > 768) {
       return (
@@ -234,7 +234,10 @@ class Layout001 extends Component {
               closeIcon={closeIcon}
               controlHandler={this.controlHandler}
               branchHasChanged={this.state.branchHasChanged}
-              moduleHasChanged={this.state.moduleHasChanged}/>
+              moduleHasChanged={this.state.moduleHasChanged}
+              view={view}
+              viewTreeName={viewTreeName}
+              viewTreeIcon={viewTreeIcon}/>
             <Branches
               windowState={windowState}
               toggleWindow={toggleWindow}
@@ -253,7 +256,9 @@ class Layout001 extends Component {
               saveModuleContentSync={this.saveModuleContentSync}
               setBranchHasChanged={this.setBranchHasChanged}
               setUrlSelector={this.setUrlSelector}
-              userName={userName}/>
+              userName={userName}
+              isAllowed={isAllowed}
+              view={view}/>
             <Leaves 
               windowState={windowState}
               toggleWindow={toggleWindow}

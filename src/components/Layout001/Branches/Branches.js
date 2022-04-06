@@ -813,13 +813,22 @@ class Branches extends React.Component {
     }
 
     displayBranchContent = () => {
+      const {view, isAllowed} = this.props;
+
+      console.log('Branches.js displayBranchContent', 'view', view);
+
       if (this.state.branches === false) return (<></>);
 
       console.log(`Branches.js displayBranchContent`, 'this.state.branches', this.state.branches);
 
       let closedLevel = 100;
       return (
-        this.state.branches.map(branch => {
+        this.state.branches
+        .filter(branch => {
+          if (view === 'userView') return true;
+          return isAllowed(branch.branchId) ? true : false;
+        })
+        .map(branch => {
           // assign classnames
           let className = `branches__branch branches__branch-${branch.branchId} branches__branch--level-${branch.level}`
           let containerClassName = `branches__branch-container branches__branch-container--level-${branch.level}`;

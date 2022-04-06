@@ -265,9 +265,9 @@ class Leaves extends React.Component {
 
     if (view !== 'userView') return (
       <section className={sectionClassName}>
-      <div className="leaves__title-container">
+      {/* <div className="leaves__title-container">
          {this.displayModuleTitle()}
-      </div>
+      </div> */}
       <div className='leaves__content'>
         {this.displayModule()}
       </div>

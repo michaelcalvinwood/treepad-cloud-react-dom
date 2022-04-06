@@ -31,6 +31,7 @@ class App extends Component {
     viewTreeName: '',
     viewTreeIcon: '',
     viewBranchId: false,
+    viewBranchOrder: [],
     prevUrl: ''
   }
 
@@ -69,6 +70,42 @@ class App extends Component {
 
   }
 
+  isAllowed = branchId => {
+    const {viewBranchId, viewBranchOrder} = this.state;
+
+    if (!viewBranchOrder.length) return false;
+
+    // get index of allowed branch
+    
+    let viewLevel;
+    let parts;
+    let index = -1;
+    for (let i = 0; i < viewBranchOrder.length; ++i) {
+      parts = viewBranchOrder[i].split(":");
+      if (parts[0].toString() === viewBranchId.toString()) {
+        index = i;
+        viewLevel = parts[1];
+        break;
+      }
+    }
+
+    // get numChildren
+    let numChildren = 0;
+    for (let i = index + 1; i < viewBranchOrder.length; ++i) {
+      parts = viewBranchOrder[i].split(":");
+      if (parts[1] <= viewLevel) break;
+      ++numChildren
+    }
+    
+    for (let i = index; i < index + numChildren + 1; ++i) {
+      parts = viewBranchOrder[i].split(":");
+      if (parts[0].toString() === branchId.toString()) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   authenticateUrl = location => {
     if (location.href === this.state.prevUrl) return;
 
@@ -93,13 +130,16 @@ class App extends Component {
           userName: res.data.username,
           view: res.data.view,
           viewTreeId: res.data.treeId,
+          viewTreeName: res.data.treeName,
+          viewTreeIcon: `${process.env.REACT_APP_BASE_URL}/${res.data.treeIcon}`,
           viewBranchId: res.data.branchId,
           windowState: {
             trees: false,
-            controls: false,
+            controls: true,
             branches: false,
             leaves: true
-          }
+          },
+          viewBranchOrder: JSON.parse(res.data.branchOrder)
         })
       }
 
@@ -109,13 +149,16 @@ class App extends Component {
           userName: res.data.username,
           view: res.data.view,
           viewTreeId: res.data.treeId,
+          viewTreeName: res.data.treeName,
+          viewTreeIcon: `${process.env.REACT_APP_BASE_URL}/${res.data.treeIcon}`,
           viewBranchId: res.data.branchId,
           windowState: {
             trees: false,
-            controls: false,
+            controls: true,
             branches: true,
             leaves: true
-          }
+          },
+          viewBranchOrder: JSON.parse(res.data.branchOrder)
         })
       }
     })
@@ -165,7 +208,10 @@ class App extends Component {
           setWindowState={this.setWindowState}
           view={this.state.view}
           viewBranchId={this.state.viewBranchId}
-          viewTreeId={this.state.viewTreeId} />
+          viewTreeId={this.state.viewTreeId}
+          viewTreeName={this.state.viewTreeName}
+          viewTreeIcon={this.state.viewTreeIcon}
+          isAllowed={this.isAllowed} />
       )
     }
 
