@@ -24,9 +24,7 @@ import React from 'react';
 class Controls extends React.Component {
 
     componentDidMount() {
-        setInterval(() => {
-            this.props.controlHandler('save');
-        }, 30000)
+       
     }
 
     render() {

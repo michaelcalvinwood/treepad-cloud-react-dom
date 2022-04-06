@@ -764,7 +764,6 @@ class Branches extends React.Component {
       case 'auto-save':
       case 'Save':
         controlHandler(null);
-        this.saveBranches();
         break;
       case 'Up':
         controlHandler(null);
