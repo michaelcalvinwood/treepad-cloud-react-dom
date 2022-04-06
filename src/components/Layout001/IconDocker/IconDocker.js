@@ -11,8 +11,6 @@ function IconDocker({windowState, setWindowState, view}) {
 
     modifiedWindowState[name] = !modifiedWindowState[name];
 
-    console.log('IconDocker.js iconClicked', 'modifiedWindowState', modifiedWindowState)
-
     setWindowState(modifiedWindowState);
   }
   

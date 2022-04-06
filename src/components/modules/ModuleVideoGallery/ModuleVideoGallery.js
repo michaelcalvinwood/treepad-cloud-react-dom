@@ -83,7 +83,6 @@ export class ModuleVideoGallery extends Component {
 
 
     componentDidUpdate() {
-        console.log('ModuleVideoGallery componentDidUpate', 'content', this.props.content);
     }
 
   render() {

@@ -27,7 +27,6 @@ export class ModuleImageGallery extends Component {
 
 
     componentDidUpdate() {
-        // console.log('ModuleImageGallery componentDidUpate', 'content', this.props.content);
     }
 
   render() {

@@ -44,7 +44,6 @@ export class UploadModuleAssets extends Component {
     }
 
     moveItem = (index, relativeMovement) => {
-        console.log('UploadModuleAssets moveItem', 'index', index, 'relativeMovement', relativeMovement)
         let modifiedContent = [...this.props.content];
 
         let desiredIndex;
@@ -60,8 +59,6 @@ export class UploadModuleAssets extends Component {
 
         const removed = modifiedContent.splice(index, 1);
 
-        console.log('content', this.props.content);
-        console.log ('UploadModuleAssets moveItem', 'removed', removed);
         modifiedContent.splice(desiredIndex, 0, removed[0]);
 
         this.props.setContent(modifiedContent);
@@ -70,9 +67,6 @@ export class UploadModuleAssets extends Component {
 
     clickHandler = (e, index, direction) => {
         e.stopPropagation();
-        console.log ('UploadModuleAssets.js clickHandler', 'index', index, 'direction', direction);
-        console.log ('event', e);
-
         const {content} = this.props.content;
 
         if (direction === 'left') {
@@ -85,13 +79,10 @@ export class UploadModuleAssets extends Component {
 
         const workspaceWidth = document.querySelector('.upload-module-assets__work-space').offsetWidth;
         const imageWidth = document.querySelector('.image-mover__image').offsetWidth + 32; // 2rem padding = 32px
-        console.log ('workspaceWidth', workspaceWidth, 'imageWidth', imageWidth);
 
         let spaceAvailable = workspaceWidth - 64; // subract the 1rem padding from both sides
 
         let numPicsPerRow = Math.floor(spaceAvailable/imageWidth);
-
-        console.log("pics per row", numPicsPerRow);
 
         if (direction === 'up') {
             return this.moveItem(index, -numPicsPerRow);
@@ -125,7 +116,6 @@ export class UploadModuleAssets extends Component {
             case 'mp4':
                 parts = fn.split('.');
                 parts.pop(); // get rid of extension
-                console.log (parts, typeof parts);
                 fileName = parts.join('.');
                 fileName += '-thumbnail-320x240-0001.png';
                 return fileName;
@@ -135,8 +125,6 @@ export class UploadModuleAssets extends Component {
     }
 
     handleUploadedFiles = files => {
-        console.log('UploadModuleAssets handleUploadedFiles', files);
-
         if (!files.length) return;
 
         let modifiedContent = this.props.content;
@@ -148,14 +136,12 @@ export class UploadModuleAssets extends Component {
         let thumbnailStack = [];
 
         for (let i = 0; i < files.length; i += 1) {
-            console.log('UploadModuleAssets handleUploadedFiles', 'file[i]', files[i]);
             let fileName = files[i].name;
             const parts = fileName.split(/\.(?=[^.]*$)/);
             parts[0] = parts[0].replace(/\W+/g, "-");
             fileName = parts.join(".");
             let extension = this.getFileExtension(fileName);
             if (extension) {
-                console.log('UploadModuleAssets handleUploadedFiles', 'sanitized fileName', fileName)
                 formData.append("image", files[i], fileName);
                 
                 let thumbnailName = this.getThumbnailName(fileName, extension);
@@ -187,9 +173,7 @@ export class UploadModuleAssets extends Component {
         }
         axios(request)
         .then(res => {
-            this.props.setContent(modifiedContent);
-            console.log('UploadModuleAssets handleUploadedFiles axios', res.data);
-            
+            this.props.setContent(modifiedContent);            
             this.createThumbnails(thumbnailStack);
         })
         .catch(err => {
@@ -199,7 +183,6 @@ export class UploadModuleAssets extends Component {
 
     displayPics = () => {
         const {content} = this.props;
-        console.log('UploadModuleAssets.js displayPics', 'content type', typeof content, 'content', content)
         if (!content.length) {
             return (
                 <p>Drag 'n' drop some files here, or click to select files</p>

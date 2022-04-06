@@ -2,7 +2,7 @@ import React from 'react';
 import './IconCard.scss';
 
 function IconCard({icon, theKey, getSelectedIcon}) {
-    //all icons have this format /svg/{setName}/{iconName}
+    // all icons have this format /svg/{setName}/{iconName}
 
     let loc = 5;
     let end = icon.indexOf('/', loc);

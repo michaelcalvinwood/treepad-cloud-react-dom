@@ -25,7 +25,6 @@ export class AddTree extends Component {
   }
 
   createTree = () => {
-    console.log (`Create tree ${this.state.treeName}: ${this.state.treeDesc}\n${this.state.icon}`);
     const request = {
       url: process.env.REACT_APP_BASE_URL + '/trees',
       method: 'post',

@@ -14,7 +14,6 @@ export class ModuleSelector extends Component {
     }
 
     selector = moduleName => {
-        console.log(`ModuleSelector selector ${moduleName}`, 'color: orange')
         const request = {
             url: `${process.env.REACT_APP_BASE_URL}/modules/${this.props.branchId}`,
             method: "put", 
@@ -27,7 +26,6 @@ export class ModuleSelector extends Component {
         }
         axios(request)
         .then(res => {
-            console.log('ModuleSelector selector axios', res.data);
             this.props.getActiveModule(true);
         })
         .catch(err => {
@@ -36,7 +34,6 @@ export class ModuleSelector extends Component {
     }
 
     fetchAvailableModules = () => {
-        console.log('ModuleSelector fetchAvailableModules()');
         if (!this.state.availableModules.length) {
             const request = {
                 url: `${process.env.REACT_APP_BASE_URL}/modules/`,
@@ -48,7 +45,6 @@ export class ModuleSelector extends Component {
 
             axios(request)
             .then(res => {
-                console.log('ModuleSelector fetchAvailableModules axios', res.data);
                 setTimeout(() => this.setState({availableModules: res.data}), 500);
             })
             .catch(err => {

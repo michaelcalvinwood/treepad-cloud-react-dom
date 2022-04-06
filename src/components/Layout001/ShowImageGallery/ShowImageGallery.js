@@ -142,9 +142,6 @@ class ShowImageGallery extends React.Component {
   }
 
   render() {
-
-    console.log ('ShowImageGallery', 'props', this.props)
-
     const images = this.props.content.map(fileName => {
         const url=`${process.env.REACT_APP_BASE_URL}/asset/${this.props.userId}/${fileName}`;
         return {
