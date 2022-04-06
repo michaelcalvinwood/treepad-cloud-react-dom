@@ -2,7 +2,6 @@ import React from 'react';
 import './ImageMover.scss';
 
 function ImageMover({url, index, clickHandler, state}) {
-  console.log('ImageMover.js ImageMover', 'state', state)
   return (
     <div className='image-mover'>
         <img className="image-mover__image" src={url} />

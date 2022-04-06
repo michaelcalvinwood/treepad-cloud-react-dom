@@ -9,29 +9,26 @@ import ModuleQuill from '../../modules/ModuleQuill/ModuleQuill';
 import ModuleImageGallery from '../../modules/ModuleImageGallery/ModuleImageGallery';
 import ModuleVideoGallery from '../../modules/ModuleVideoGallery/ModuleVideoGallery';
 
-// add items to quill toolbar
-// const modules = {
-//   toolbar: [
-//       ['image']
-//   ]
-// }
+import UrlSelector from '../UrlSelector/UrlSelector';
 
 class Leaves extends React.Component {
 
-  setContent = content => {
-    console.log (`Leaves.js setContent`, content);
+  state = {
+    displayCloudLink: false
+  }
 
+  setCloudLink = state => {
+    this.setState({displayCloudLink: state});
+  }
+
+  setContent = content => {
     this.props.updateModuleContent(content);
   }
 
   changeModule = () => {
+    this.setActiveModule('null');
+
     this.saveModuleContent();
-
-    this.props.updateModuleId(0);
-    this.props.updateModuleName('');
-    this.props.updateModuleIcon('');
-    this.props.updateModuleContent('');
-
   }
 
   displayLandingPage = sectionClassName => {
@@ -50,8 +47,6 @@ class Leaves extends React.Component {
   saveModuleContent = () => {
     const {moduleName, moduleContent, moduleSaved, branchId} = this.props;
 
-    console.log('Leaves.js saveModuleContent', 'moduleName', moduleName, 'moduleContent', moduleContent);
-
     if (!moduleName) return moduleSaved();
 
     const request = {
@@ -67,13 +62,13 @@ class Leaves extends React.Component {
 
     axios(request)
     .then(res => {
-      console.log('Leaves.js saveModuleContent axios', res.data);
     })
     .catch(err => {
       console.error('Leaves.js saveModuleContent axios', err);
     })
 
     moduleSaved();
+    this.props.setModuleHasChanged(false);
   }
 
   displayModule = () => {
@@ -90,9 +85,7 @@ class Leaves extends React.Component {
     }
 
     axios(request)
-    .then(res => {
-      console.log(`Branches.js getActiveModule ${moduleName} for ${branchId} axios`, res)
-      
+    .then(res => {      
       this.props.updateModuleContent(JSON.parse(res.data.content));
     })
     .catch(err => {
@@ -104,7 +97,6 @@ class Leaves extends React.Component {
 
   getActiveModule = (override) => {
     const { branchId } = this.props;
-    console.log('Leaves.js getActiveModule', 'branchId', branchId, 'moduleId', this.props.moduleId, 'override', override);
     if (branchId === false) return;
     
     if (override === undefined) {
@@ -124,9 +116,7 @@ class Leaves extends React.Component {
     }
 
     axios(request)
-    .then(res => {
-      console.log(`Leaves.js getActiveModule axios`, res.data)
-  
+    .then(res => {  
       this.props.updateModuleName(res.data.moduleName);
       this.props.updateModuleIcon(res.data.moduleIcon);
       this.getActiveModuleContent(res.data.moduleName, branchId);
@@ -138,7 +128,6 @@ class Leaves extends React.Component {
 
   setActiveModule = (moduleName) => {
     const { branchId } = this.props;
-    console.log('Leaves.js setActiveModule', 'branchId', branchId, 'moduleName', moduleName);
     if (branchId === false) return;
     
     this.props.updateModuleId(branchId);
@@ -152,16 +141,16 @@ class Leaves extends React.Component {
         Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
       },
       data: {
-        module: moduleName ? moduleName : 'null'
+        moduleName: moduleName ? moduleName : 'null'
       }
     }
 
     axios(request)
     .then(res => {
-      console.log(`Leaves.js setActiveModule axios`, res.data)
-  
-      this.props.updateModuleName(res.data.moduleName);
-      this.props.updateModuleIcon(res.data.moduleIcon);
+      this.props.updateModuleId(0);
+      this.props.updateModuleName('');
+      this.props.updateModuleIcon('');
+      this.props.updateModuleContent('');
       this.getActiveModuleContent(res.data.moduleName, branchId);
     })
     .catch(err => {
@@ -171,17 +160,16 @@ class Leaves extends React.Component {
  
   
   displayModuleTitle = () => {
-    console.log('Leaves.js displayModuleTitle', 'moduleName', this.props.moduleName, "color:red");
     if (!this.props.moduleName) {
-      return (<p className='leaves__default-title'>Branch Contents</p>)
+      return (<p className='leaves__default-title'>Contents</p>)
     }
 
     return (
-      
-        <div className="leaves__title">      
+        <div 
+          className="leaves__title"
+          onClick={this.changeModule}>      
           <img 
             className='leaves__icon' 
-            onClick={this.changeModule}
             src={`${process.env.REACT_APP_BASE_URL}${this.props.moduleIcon}`} 
             alt="leaf" />
           <p className='leaves__name'>{this.props.moduleName.replaceAll('_', ' ')}</p>
@@ -206,9 +194,7 @@ class Leaves extends React.Component {
 
 
   displayModule = () => {
-    const {userId, branchId, moduleName, moduleContent} = this.props;
-
-    console.log(`Leaves.js displayModule ${moduleName}`, moduleContent);
+    const {userId, branchId, moduleName, moduleContent, view} = this.props;
 
     if (!moduleName) {
       return (
@@ -218,30 +204,30 @@ class Leaves extends React.Component {
       )
     }
 
-    // 
-
     switch(this.props.moduleName) {
-      case 'quill':
+      case 'notes':
         return (
           <ModuleQuill
-            content={moduleContent}
-            setContent={this.setContent} />
-        )
-      case 'image_gallery':
-        return (
-          <ModuleImageGallery
             userId={userId}
             content={moduleContent}
             setContent={this.setContent}
-          />
+            view={view} />
+        )
+      case 'images':
+        return (
+          <ModuleImageGallery
+          userId={userId}
+          content={moduleContent}
+          setContent={this.setContent}
+          view={view} />
         )
       case 'videos':
         return (
           <ModuleVideoGallery
-            userId={userId}
-            content={moduleContent}
-            setContent={this.setContent}
-          />
+          userId={userId}
+          content={moduleContent}
+          setContent={this.setContent}
+          view={view} />
         )
       default:
         return (
@@ -259,11 +245,7 @@ class Leaves extends React.Component {
 
 
   render () {
-    const {windowState, toggleWindow, linkIcon, closeIcon, branchId} = this.props;
-    console.log(`Leaves.js render`, 'branchId', branchId, 'moduleId', this.props.moduleId);
-
-    // if (!branchId) return this.displayLandingPage();
-
+    const {windowState, toggleWindow, linkIcon, closeIcon, branchId, userName, view} = this.props;
     let sectionClassName = 'leaves leaves--active';
     let contentClassName = 'leaves__content';
   
@@ -274,22 +256,40 @@ class Leaves extends React.Component {
     } 
     if (windowState.controls) sectionClassName += '-controls';
   
-    // console.log (sectionClassName)
-
     if (!this.props.moduleId) {
       return this.displayLandingPage(sectionClassName)
     }
 
+    if (view !== 'userView') return (
+      <section className={sectionClassName}>
+        <div className='leaves__content'>
+          {this.displayModule()}
+        </div>
+      </section>
+    )
+
     return (
       <section className={sectionClassName}>
-        <img className="leaves__link" src={linkIcon} />
-        <img className="leaves__close" src={closeIcon} />
+          
+        <img 
+          className="leaves__link"
+          src={linkIcon} 
+          onClick={() => this.setCloudLink(true)}/>
+        <img 
+          className="leaves__close" 
+          src={closeIcon} 
+          onClick={this.changeModule}/>
         <div className="leaves__title-container">
            {this.displayModuleTitle()}
         </div>
         <div className='leaves__content'>
           {this.displayModule()}
         </div>
+        <UrlSelector
+              display={this.state.displayCloudLink}
+              linkType='Leaf View'
+              url={`http://${userName}.${window.location.host}/l/${branchId}`}
+              setCloudLink={this.setCloudLink} />
         </section>
     )
   }

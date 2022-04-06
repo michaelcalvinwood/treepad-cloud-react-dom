@@ -26,26 +26,20 @@ export default class Trees extends Component {
         }
         axios(request)
         .then((response) => {
-            console.log ("got trees", response.data.message);
             this.setState({
                 trees: response.data.message
             })
         })
-        .catch(err => console.log('GET /trees/'))
+        .catch(err => console.error(err));
     }
 
     addTree = userId => {
-        console.log ('Trees.js addTree', userId);
-
         this.setState({
             addTree: true
         })
-        // this.props.setTree(-2);
     }
 
     handleSelect = (treeId) => {
-        console.log (`Tree.js handleSelect(${treeId})`);
-
         const id = Number(treeId);
 
         if (id === -1) this.addTree(this.props.userId);
@@ -66,7 +60,6 @@ export default class Trees extends Component {
 
         const turnOnDisplay = () => {
             const el = document.querySelector('.trees__content');
-            console.log (el)
             setTimeout(() => {
                 el.style.display = 'block';
             }, 500);
@@ -80,15 +73,13 @@ export default class Trees extends Component {
                     Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
                 }
             }
-            console.log(request.url);
             axios(request)
             .then((response) => {
-                console.log ("got trees", response.data.message);
                 this.setState({
                     trees: response.data.message
                 })
             })
-            .catch(err => console.log('GET /trees/'))
+            .catch(err => console.error(err));
             turnOnDisplay();
         } else {
             const el = document.querySelector('.trees__content');
@@ -99,7 +90,6 @@ export default class Trees extends Component {
 
     render() {
         const { windowState, toggleWindow, setTheTree, userName, userId, linkIcon, closeIcon } = this.props;
-        console.log ('Trees.js render');
 
         let sectionClassName = 'trees';
         let titleClassName = 'trees__title';
@@ -126,8 +116,6 @@ export default class Trees extends Component {
             userName,
         }
 
-        // console.log ("info", info)
-        
         return (
             <>
                 <section className={sectionClassName}>

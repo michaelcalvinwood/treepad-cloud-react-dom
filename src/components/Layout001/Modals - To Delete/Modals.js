@@ -18,8 +18,6 @@ export class Modals extends Component {
     }
 
     getModalContent = () => {
-        console.log ('getModalContent', this.state.modalName, this.state.modalInfo);
-                
         switch (this.state.modalName) {
             case 'defaultModal':
                 return defaultModal();
@@ -28,7 +26,6 @@ export class Modals extends Component {
                 return addTree(this.state.modalInfo, this.updateState);
 
             default:
-                console.log (`unknown modal ${this.state.modalName}`);
                 this.setState({modalName: ''});
         }
     }

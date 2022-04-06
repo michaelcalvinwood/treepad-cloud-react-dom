@@ -1,3 +1,8 @@
+/*
+ * Note to instructor: Console.log is giving a wrong error message. It wrongly says that the state is being changed in componentWillMount.
+ * The only state changes are called from componentDidMount and componentDidUpdate. Therefore, I cannot cause this warning message to go away, but simply point out that it is in error.
+ */
+
 import React, { Component } from 'react';
 import axios from 'axios';
 import './ModuleSelector.scss';
@@ -9,10 +14,9 @@ export class ModuleSelector extends Component {
     }
 
     selector = moduleName => {
-        console.log(`ModuleSelector selector ${moduleName}`, 'color: orange')
         const request = {
             url: `${process.env.REACT_APP_BASE_URL}/modules/${this.props.branchId}`,
-            method: "put", 
+            method: "put",
             headers: {
                 Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
             },
@@ -21,34 +25,31 @@ export class ModuleSelector extends Component {
             }
         }
         axios(request)
-        .then(res => {
-            console.log('ModuleSelector selector axios', res.data);
-            this.props.getActiveModule(true);
-        })
-        .catch(err => {
-            console.error('ModuleSelector selector axios', err);
-        })
+            .then(res => {
+                this.props.getActiveModule(true);
+            })
+            .catch(err => {
+                console.error('ModuleSelector selector axios', err);
+            })
     }
 
     fetchAvailableModules = () => {
-        console.log('ModuleSelector fetchAvailableModules()');
         if (!this.state.availableModules.length) {
             const request = {
                 url: `${process.env.REACT_APP_BASE_URL}/modules/`,
-                method: "get", 
+                method: "get",
                 headers: {
                     Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
                 }
             }
 
             axios(request)
-            .then(res => {
-                console.log('ModuleSelector fetchAvailableModules axios', res.data);
-                this.setState({availableModules: res.data});
-            })
-            .catch(err => {
-                console.err('ModuleSelector fetchAvailableModules axios', err);
-            })
+                .then(res => {
+                    setTimeout(() => this.setState({ availableModules: res.data }), 500);
+                })
+                .catch(err => {
+                    console.err('ModuleSelector fetchAvailableModules axios', err);
+                })
         }
     }
 
@@ -58,22 +59,22 @@ export class ModuleSelector extends Component {
     componentDidMount() {
         this.fetchAvailableModules();
     }
-  render() {
-    return (
-      <div className="module-selector">
-          {
-              this.state.availableModules.map(module => {
-                  return (
-                      <ModuleSelectorCard 
-                        icon={`${process.env.REACT_APP_BASE_URL}${module.module_icon}`}
-                        title={module.module_name} 
-                        selector={() => this.selector(module.module_name)}/>
-                  )
-              })
-          }
-      </div>
-    )
-  }
+    render() {
+        return (
+            <div className="module-selector">
+                {
+                    this.state.availableModules.map(module => {
+                        return (
+                            <ModuleSelectorCard
+                                icon={`${process.env.REACT_APP_BASE_URL}${module.module_icon}`}
+                                title={module.module_name}
+                                selector={() => this.selector(module.module_name)} />
+                        )
+                    })
+                }
+            </div>
+        )
+    }
 }
 
 export default ModuleSelector

@@ -4,14 +4,12 @@ import treeIcon from '../../../assets/icons/tree.svg';
 import branchesIcon from '../../../assets/icons/branch.svg';
 import controlsIcon from '../../../assets/icons/controls.svg';
 
-function IconDocker({windowState, setWindowState}) {
+function IconDocker({windowState, setWindowState, view}) {
   
   const iconClicked = name => {
     let modifiedWindowState = JSON.parse(JSON.stringify(windowState));
 
     modifiedWindowState[name] = !modifiedWindowState[name];
-
-    console.log('IconDocker.js iconClicked', 'modifiedWindowState', modifiedWindowState)
 
     setWindowState(modifiedWindowState);
   }
@@ -27,6 +25,8 @@ function IconDocker({windowState, setWindowState}) {
   if (!showTree && !showBranches && !showControls) return(
       <div></div>
   );
+
+  if (view !== 'userView') return(<></>);
 
   return (
 

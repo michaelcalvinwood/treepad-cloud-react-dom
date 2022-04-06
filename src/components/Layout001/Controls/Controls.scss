@@ -42,11 +42,6 @@
         top: .25rem;
         left: 0;
         width: 100%;
-        // width: 100%;
-        // height: 2rem;
-        // display: flex;
-        // justify-content: center;
-        // align-items: center;
     }
     &__logo {
         display: flex;
@@ -56,13 +51,6 @@
     &__logo-icon {
         height: 1.5rem;
     }
-    // &__link {
-    //     position: absolute;
-    //     top: 2.5rem;
-    //     left: .5rem;
-    //     height: .75rem;
-    //     cursor: pointer;
-    //   }
     &__close {
         position: absolute;
         top: .5rem;
@@ -70,14 +58,8 @@
         height: .75rem;
         width: .75rem;
         cursor: pointer;
+        z-index: 10;
       }
-
-    // &__logo {
-    //     position: absolute;
-    //     top: .5rem;
-    //     left: 1rem;
-    //     height: 3rem;
-    // }
     &__settings {
         height: 1.25rem;
         width: 1.25rem;
@@ -85,7 +67,6 @@
         top: .5rem;
         right: .5rem;
     }
-
     &__title-container {
         text-align: center;
     }
@@ -93,7 +74,6 @@
         width: 3rem;
 
     }
-
     &__content {
         margin: 1rem 0 0 0;
         width: 100%;
@@ -112,8 +92,16 @@
         display: flex;
         justify-content: flex-start;
     }
-    
-
-
-
+    &__view-container {
+        display: flex;
+        justify-content: flex-start;
+        align-items:baseline;
+    }
+    &__view-icon {
+        height: 3rem;
+        margin: 0 .5rem 0 0;
+    }
+    &__view-name {
+        font-size: 3rem;
+    }
 }

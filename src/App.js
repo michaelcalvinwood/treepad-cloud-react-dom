@@ -2,12 +2,7 @@ import './App.scss';
 import { Component } from 'react';
 import Layout001 from './components/Layout001/Layout001';
 import GetUser from './components/GetUser/GetUser'
-
-// import Trees from './components/Trees/Trees';
-// import Controls from './components/Controls/Controls';
-// import Branches from './components/Branches/Branches';
-// import Leaves from './components/Leaves/Leaves';
-// import './styles/fontawesome/css/all.css'
+import axios from 'axios';
 
 class App extends Component {
   state = {
@@ -25,6 +20,13 @@ class App extends Component {
     },
     windowHeight: window.innerHeight,
     windowWidth: window.innerWidth,
+    view: 'userView',
+    viewTreeId: false,
+    viewTreeName: '',
+    viewTreeIcon: '',
+    viewBranchId: false,
+    viewBranchOrder: [],
+    prevUrl: ''
   }
 
   setUser = (userId, userName, jwt = 'public') => {
@@ -33,8 +35,6 @@ class App extends Component {
       userId: userId,
       jwt: jwt
     })
-
-    console.log ('App.js setUser', userName, userId);
   }
 
   setWindowState = windowState => {
@@ -43,11 +43,8 @@ class App extends Component {
   
 
   toggleWindow = (e, window) => {
-    console.log(`App.js toggleWindow ${window}`);
-    
     let windowState = this.state.windowState;
     windowState[window] = !windowState[window]; 
-    console.log (window, windowState);
     this.setState({
       windowState: windowState,
     })
@@ -62,14 +59,143 @@ class App extends Component {
       }
     )
   }
+
+  getUrlParts = url => {
+
+  }
+
+  isAllowed = branchId => {
+    const {viewBranchId, viewBranchOrder} = this.state;
+
+    if (!viewBranchOrder.length) return false;
+
+    // get index of allowed branch
+    
+    let viewLevel;
+    let parts;
+    let index = -1;
+    for (let i = 0; i < viewBranchOrder.length; ++i) {
+      parts = viewBranchOrder[i].split(":");
+      if (parts[0].toString() === viewBranchId.toString()) {
+        index = i;
+        viewLevel = parts[1];
+        break;
+      }
+    }
+
+    // get numChildren
+    let numChildren = 0;
+    for (let i = index + 1; i < viewBranchOrder.length; ++i) {
+      parts = viewBranchOrder[i].split(":");
+      if (parts[1] <= viewLevel) break;
+      ++numChildren
+    }
+    
+    for (let i = index; i < index + numChildren + 1; ++i) {
+      parts = viewBranchOrder[i].split(":");
+      if (parts[0].toString() === branchId.toString()) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  authenticateUrl = location => {
+    if (location.href === this.state.prevUrl) return;
+
+    const request = {
+      url: `${process.env.REACT_APP_BASE_URL}/authenticate`,
+      method: 'post',
+      data: {
+        url: JSON.stringify(location)
+      }
+    }
+
+    axios(request)
+    .then(res => {
+      if (res.data.view === 'leafView') {
+        sessionStorage.authToken = res.data.token;
+        sessionStorage.userId = res.data.userid.toString();
+        sessionStorage.userName = res.data.username;
+        sessionStorage.view=res.data.view;
+        const userId = Number(res.data.userid);
+        
+        this.setState({
+          userId: userId,
+          userName: res.data.username,
+          view: res.data.view,
+          viewTreeId: res.data.treeId,
+          viewTreeName: res.data.treeName,
+          viewTreeIcon: `${process.env.REACT_APP_BASE_URL}/${res.data.treeIcon}`,
+          viewBranchId: res.data.branchId,
+          windowState: {
+            trees: false,
+            controls: true,
+            branches: false,
+            leaves: true
+          },
+          viewBranchOrder: JSON.parse(res.data.branchOrder)
+        })
+        return;
+      }
+
+      if (res.data.view === 'branchView') {
+        sessionStorage.authToken = res.data.token;
+        sessionStorage.userId = res.data.userid.toString();
+        sessionStorage.userName = res.data.username;
+        sessionStorage.view=res.data.view;
+        const userId = Number(res.data.userid);
+        
+        this.setState({
+          userId: userId,
+          userName: res.data.username,
+          view: res.data.view,
+          viewTreeId: res.data.treeId,
+          viewTreeName: res.data.treeName,
+          viewTreeIcon: `${process.env.REACT_APP_BASE_URL}/${res.data.treeIcon}`,
+          viewBranchId: res.data.branchId,
+          windowState: {
+            trees: false,
+            controls: true,
+            branches: true,
+            leaves: true
+          },
+          viewBranchOrder: JSON.parse(res.data.branchOrder)
+        })
+        return;
+      }
+      const sessionView = sessionStorage.getItem('view');
+      if (!sessionView) return;
+      sessionStorage.clear();
+      this.setState({
+        view: 'userView'
+      })
+    })
+    .catch(err => {
+      console.error('App.js authenticateUrl axios', err);
+    })
+
+    this.setState({prevUrl: location.href});
+  }
+
+  validateView = () => {
+    
+    const location = window.location;
+
+    this.authenticateUrl(location);
+  }
+
+  componentDidUpdate() {
+    this.validateView();
+  }
   
   componentDidMount() {
     window.addEventListener('resize', this.windowResize);
     document.title="TreePad Cloud";
+    this.validateView();
   }
 
   render () {
-    console.log('App.js render', 'this.state.userName', this.state.userName, 'this.state.userId', this.state.userId);
     if (!this.state.userName || !this.state.userId) {
       return (
         <GetUser 
@@ -88,7 +214,13 @@ class App extends Component {
           userName={this.state.userName}
           userId={this.state.userId}
           jwt={this.state.jwt}
-          setWindowState={this.setWindowState} />
+          setWindowState={this.setWindowState}
+          view={this.state.view}
+          viewBranchId={this.state.viewBranchId}
+          viewTreeId={this.state.viewTreeId}
+          viewTreeName={this.state.viewTreeName}
+          viewTreeIcon={this.state.viewTreeIcon}
+          isAllowed={this.isAllowed} />
       )
     }
 

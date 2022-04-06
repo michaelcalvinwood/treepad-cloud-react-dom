@@ -69,28 +69,19 @@ export class ModuleVideoGallery extends Component {
             })}
         </div>
       )
-      
-      
-      this.props.content.map((fileName, index) => {
-        return <ImageMover 
-            url={`${process.env.REACT_APP_BASE_URL}/asset/${this.props.userId}/${fileName}`} 
-            index={index}
-            clickHandler={this.clickHandler}
-            state={false}/>
-        })
         
     }
 
 
     componentDidUpdate() {
-        console.log('ModuleVideoGallery componentDidUpate', 'content', this.props.content);
     }
 
   render() {
-    let {userId, content, setContent} = this.props;
+    let {userId, content, setContent, view} = this.props;
 
     return (
         <UploadModuleAssets
+            view={view}
             userId={userId}
             content={content}
             setContent={setContent}

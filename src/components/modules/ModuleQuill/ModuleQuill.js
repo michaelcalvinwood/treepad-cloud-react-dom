@@ -19,8 +19,6 @@ export class ModuleQuill extends Component {
     if (!content.length) content = '';
     else content = content[0];
 
-    console.log('ModuleQuill.js render', 'content', content);
-
     const  modules  = {
         toolbar: [
             [{ font: [] }],
