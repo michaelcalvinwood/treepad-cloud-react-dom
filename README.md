@@ -12,7 +12,7 @@ To prepare for remote deployment, run:
     npm build
 
 Using the App:
-    login with the username 'admin' using the password provided in the server's .env file.\You do not need to provide the email address (it can be blank).
+    login with the username 'admin' using the password provided in the server's .env file. You do not need to provide the email address (it can be blank).
 
     click +Add tree to create a tree.
     Assign a tree name, and optionally choose an icon using the search bar.
