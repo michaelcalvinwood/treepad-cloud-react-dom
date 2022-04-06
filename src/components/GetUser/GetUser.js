@@ -25,25 +25,6 @@ class GetUser extends React.Component {
         this.password = e.target.value;
     }
 
-    // getBranchPool = userId => {
-    //     const request = {
-    //         url: `${process.env.REACT_APP_BASE_URL}/branch-pool/${userId}`,
-    //         method: 'get',
-    //         headers: {
-    //             Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
-    //         }
-    //     }
-
-    //     axios(request)
-    //     .then(res => {
-    //         console.log (`GetUser.js getBranchPool(${userId}) axios response.data`, res.data.message[0]);
-    //         this.props.setBranchPool(res.data.message[0].user_id, JSON.parse(res.data.message[0].branch_pool));
-    //     })
-    //     .catch(err => {
-    //         console.log (`GetUser.js getBranchPool(${userId}) axios error`, err);
-    //     })
-    // }
-
     handleLogin = e => {
         e.preventDefault();
 
@@ -66,7 +47,6 @@ class GetUser extends React.Component {
 
         axios(request)
         .then(res => {
-            console.log(`GetUser.js handleLogin axios success`, res.data);
             sessionStorage.authToken = res.data.token;
             sessionStorage.userId = res.data.userId.toString();
             sessionStorage.userName = userName;
@@ -77,8 +57,6 @@ class GetUser extends React.Component {
         .catch(err => {
             console.error(`GetUser.js handleLogin axios error`, err);
         })
-        
-        console.log (`GetUser.js handleLogin`, 'request', request);
     }
 
     componentDidMount() {

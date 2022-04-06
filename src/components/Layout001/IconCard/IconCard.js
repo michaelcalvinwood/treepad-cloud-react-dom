@@ -11,8 +11,6 @@ function IconCard({icon, theKey, getSelectedIcon}) {
     loc = name.indexOf('.');
     name = name.substring(0, loc);
 
-    // console.log ('iconCard', set, name, loc, end);
-
   return (
     <div className="icon-card" key={theKey}>
         <p 

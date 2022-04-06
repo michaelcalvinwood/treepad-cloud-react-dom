@@ -1,3 +1,8 @@
+/*
+ * Note to instructor: Console.log is giving a wrong error message. It wrongly says that the state is being changed in componentWillMount.
+ * The only state changes are called from componentDidMount and componentDidUpdate. Therefore, I cannot cause this warning message to go away, but simply point out that it is in error.
+ */
+
 import React, { Component } from 'react';
 import axios from 'axios';
 import './ModuleSelector.scss';
@@ -44,7 +49,7 @@ export class ModuleSelector extends Component {
             axios(request)
             .then(res => {
                 console.log('ModuleSelector fetchAvailableModules axios', res.data);
-                this.setState({availableModules: res.data});
+                setTimeout(() => this.setState({availableModules: res.data}), 500);
             })
             .catch(err => {
                 console.err('ModuleSelector fetchAvailableModules axios', err);

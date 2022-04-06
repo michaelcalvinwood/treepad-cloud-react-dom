@@ -30,7 +30,7 @@
         background-color: $default-background;
 
         &::placeholder {
-            color: light-grey;
+            color: $placeholder-color;
         }
     }
     &__tree-desc {
@@ -44,7 +44,7 @@
         background-color: $default-background;
 
         &::placeholder {
-            color: light-grey;
+            color: $placeholder-color;
         }
     }
     &__create {

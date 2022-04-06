@@ -249,8 +249,10 @@ export class UploadModuleAssets extends Component {
     }
 
     render() {
-        let {content, setContent} = this.props;
-    
+        let {content, setContent, view} = this.props;
+        
+        if (view !== 'userView') return this.props.display();
+        
         return (
           <div className="upload-module-assets">
               <div className="upload-module-assets__actions">

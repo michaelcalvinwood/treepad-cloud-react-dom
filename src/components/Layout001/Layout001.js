@@ -11,6 +11,7 @@ import axios from 'axios';
 import linkIcon from '../../assets/icons/cloud.svg'
 import closeIcon from '../../assets/icons/close.svg';
 import IconDocker from './IconDocker/IconDocker';
+import UrlSelector from './UrlSelector/UrlSelector';
 
 class Layout001 extends Component {
 
@@ -23,9 +24,33 @@ class Layout001 extends Component {
     moduleId: 0,
     moduleName: '',
     moduleIcon: '',
-    moduleContent: []
+    moduleContent: [],
+    branchHasChanged: false,
+    moduleHasChanged: false,
+    displayCloudLink: false,
+    cloudLinkType: 'Branch View',
+    cloudLinkUrl: '', 
   }
 
+  setCloudLink = state => {
+    this.setState({displayCloudLink: state});
+  }
+
+  setUrlSelector = (linkType, linkUrl) => {
+    this.setState({
+      displayCloudLink: true,
+      cloudLinkType: linkType,
+      cloudLinkUrl: linkUrl
+    })
+  }
+
+  setBranchHasChanged = state => {
+    this.setState({branchHasChanged: state})
+  }
+
+  setModuleHasChanged = state => {
+    this.setState({moduleHasChanged: state})
+  }
 
   getBranchPool = userId => {
     const request = {
@@ -38,8 +63,6 @@ class Layout001 extends Component {
 
     axios(request)
     .then(res => {
-        console.clear();
-        console.log (`Layout001.js getBranchPool(${userId}) axios response.data`, res.data.message[0]);
         this.setBranchPool(res.data.message[0].user_id, JSON.parse(res.data.message[0].branch_pool));
     })
     .catch(err => {
@@ -80,7 +103,6 @@ class Layout001 extends Component {
   
   saveModuleContentSync = (branchId) => {
     const {moduleName, moduleContent} = this.state;
-    console.log('Leaves.js saveModuleContentSync', branchId, moduleName, moduleContent);
 
     if (!moduleName) return;
 
@@ -97,7 +119,6 @@ class Layout001 extends Component {
 
     axios(request)
     .then(res => {
-      console.log('Leaves.js saveModuleContent axios', res.data);
     })
     .catch(err => {
       console.error('Leaves.js saveModuleContent axios', err);
@@ -106,8 +127,6 @@ class Layout001 extends Component {
   }
 
   controlHandler = type => {
-    console.log(`Layout001.js controlHandler(${type})`);
-    
     let saveModule;
 
     if (type === null) saveModule = false;
@@ -120,7 +139,6 @@ class Layout001 extends Component {
   }
 
   addBranchToBranchPool = branchId => {
-    console.log(`Layout001.js addBranchToBranchPool(${branchId}:${typeof branchId})`);
     let modifiedPool = [...this.state.branchPool];
     modifiedPool.push(branchId);
     this.setState({
@@ -129,8 +147,6 @@ class Layout001 extends Component {
   }
 
   setBranchPool = (userId, branchPool, treeId, removedBranch = false) => {
-    console.log(`Layout001.js setBranchPool(${userId}, ${branchPool})`);
-
     this.setState({
       branchPool: branchPool
     })
@@ -145,7 +161,6 @@ class Layout001 extends Component {
       }
       axios(request)
       .then(res => {
-        console.log(`Layout001.js setBranchPool axios res.data`, res.data);
         const {userId, branchId} = res.data;
         this.addBranchToBranchPool(branchId);
       })
@@ -156,8 +171,6 @@ class Layout001 extends Component {
   }
 
   setTheTree = treeId => {
-    console.log (`Layout001.js setTree(${treeId})`);
-
     this.setState({
       treeId: treeId,
       branchId: false
@@ -165,7 +178,6 @@ class Layout001 extends Component {
   }
 
   setBranch = (branchId) => {
-    console.log(`Layout001.js setBranch (${branchId}:${typeof branchId})`);
     this.setState({
       branchId: branchId
     })
@@ -175,72 +187,113 @@ class Layout001 extends Component {
     this.setState({saveModule: false});
   }
 
+  handleKeyUp = e => {
+    e.preventDefault();
+    if (e.code === 'ShiftLeft') {
+      this.controlHandler('Save');
+    }
+
+    return false;
+  }
+
+  componentDidUpdate() {
+    const {viewTreeId, viewBranchId} = this.props;
+    if (viewTreeId && viewTreeId !== this.state.treeId) {
+      this.setTheTree(viewTreeId);
+    }
+    if (viewBranchId && viewBranchId !== this.state.branchId) {
+      this.setBranch(viewBranchId);
+    }
+  }
+
   componentDidMount() {
+    const {viewTreeId, viewBranchId} = this.props;
+
     window.addEventListener('resize', this.windowResize);
+    window.addEventListener('keyup', this.handleKeyUp);
     this.getBranchPool(this.props.userId);
+    if (viewTreeId && viewTreeId !== this.state.treeId) {
+      this.setTheTree(viewTreeId);
+    }
+    if (viewBranchId && viewBranchId !== this.state.branchId) {
+      this.setBranch(viewBranchId);
+    }
   }
 
   render () {
-    const {windowState, windowHeight, windowWidth, toggleWindow, setWindowState, setTheTree, userId, userName} = this.props;
-
-    console.log (`Layout001.js render()`);
+    const {windowState, windowHeight, windowWidth, toggleWindow, setWindowState, setTheTree, userId, userName, view} = this.props;
 
     if (windowWidth > 768) {
       return (
-        <div className="app">
-          <Controls
-            windowState={windowState}
-            toggleWindow={toggleWindow}
-            linkIcon={linkIcon}
-            closeIcon={closeIcon}
-            controlHandler={this.controlHandler}/>
-          <Branches
-            windowState={windowState}
-            toggleWindow={toggleWindow}
-            treeId={this.state.treeId}
-            branchId={this.state.branchId}
-            branchPool={this.state.branchPool}
-            setBranchPool={this.setBranchPool}
-            setBranch={this.setBranch}
-            userId={userId}
-            linkIcon={linkIcon}
-            closeIcon={closeIcon}
-            controlState={this.state.controlState}
-            controlHandler={this.controlHandler}
-            moduleId={this.activeModule}
-            updateActiveModule={this.updateActiveModule}
-            saveModuleContentSync={this.saveModuleContentSync}/>
-          <Leaves 
-            windowState={windowState}
-            toggleWindow={toggleWindow}
-            linkIcon={linkIcon}
-            closeIcon={closeIcon}
-            branchId={this.state.branchId}
-            saveModule={this.state.saveModule}
-            moduleSaved={this.moduleSaved}
-            userId={userId}
-            moduleId={this.state.moduleId}
-            moduleName={this.state.moduleName}
-            moduleIcon={this.state.moduleIcon}
-            moduleContent={this.state.moduleContent}
-            updateModuleId={this.updateModuleId}
-            updateModuleName={this.updateModuleName}
-            updateModuleIcon={this.updateModuleIcon}
-            updateModuleContent={this.updateModuleContent}/>
-          <Trees 
-            windowState={windowState}
-            toggleWindow={toggleWindow}
-            setTheTree={this.setTheTree}
-            userName={userName}
-            userId={userId}
-            iconList={iconList}
-            treeId={this.state.treeId}
-            linkIcon={linkIcon}
-            closeIcon={closeIcon}/>
-          <IconDocker
-            windowState={windowState}
-            setWindowState={setWindowState}
-            />
+        <div 
+          className="app">
+            <Controls
+              windowState={windowState}
+              toggleWindow={toggleWindow}
+              linkIcon={linkIcon}
+              closeIcon={closeIcon}
+              controlHandler={this.controlHandler}
+              branchHasChanged={this.state.branchHasChanged}
+              moduleHasChanged={this.state.moduleHasChanged}/>
+            <Branches
+              windowState={windowState}
+              toggleWindow={toggleWindow}
+              treeId={this.state.treeId}
+              branchId={this.state.branchId}
+              branchPool={this.state.branchPool}
+              setBranchPool={this.setBranchPool}
+              setBranch={this.setBranch}
+              userId={userId}
+              linkIcon={linkIcon}
+              closeIcon={closeIcon}
+              controlState={this.state.controlState}
+              controlHandler={this.controlHandler}
+              moduleId={this.activeModule}
+              updateActiveModule={this.updateActiveModule}
+              saveModuleContentSync={this.saveModuleContentSync}
+              setBranchHasChanged={this.setBranchHasChanged}
+              setUrlSelector={this.setUrlSelector}
+              userName={userName}/>
+            <Leaves 
+              windowState={windowState}
+              toggleWindow={toggleWindow}
+              linkIcon={linkIcon}
+              closeIcon={closeIcon}
+              branchId={this.state.branchId}
+              saveModule={this.state.saveModule}
+              moduleSaved={this.moduleSaved}
+              userId={userId}
+              moduleId={this.state.moduleId}
+              moduleName={this.state.moduleName}
+              moduleIcon={this.state.moduleIcon}
+              moduleContent={this.state.moduleContent}
+              updateModuleId={this.updateModuleId}
+              updateModuleName={this.updateModuleName}
+              updateModuleIcon={this.updateModuleIcon}
+              updateModuleContent={this.updateModuleContent}
+              setModuleHasChanged={this.setModuleHasChanged}
+              userName={userName}
+              view={view}/>
+            <Trees 
+              windowState={windowState}
+              toggleWindow={toggleWindow}
+              setTheTree={this.setTheTree}
+              userName={userName}
+              userId={userId}
+              iconList={iconList}
+              treeId={this.state.treeId}
+              linkIcon={linkIcon}
+              closeIcon={closeIcon}/>
+            <IconDocker
+              windowState={windowState}
+              setWindowState={setWindowState}
+              view={view}
+              />
+            <UrlSelector
+              display={this.state.displayCloudLink}
+              linkType={this.state.cloudLinkType}
+              url={this.state.cloudLinkUrl}
+              setCloudLink={this.setCloudLink} />
         </div>
       )
     }
