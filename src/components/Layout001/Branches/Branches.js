@@ -151,9 +151,6 @@ class Branches extends React.Component {
   }
 
   deleteBranch = branchId => {
-    console.clear();
-
-    console.log('Branches deleteBranch', 'branchId', branchId);
 
     let modifiedBranches = [...this.state.branches];
 
@@ -411,17 +408,12 @@ class Branches extends React.Component {
       case 'left':
         // if branch is already at the top level then there is nothing to do
 
-        console.log('Branches moveBranch left', 'curLevel', curLevel);
-
         if (curLevel == 1) {
           return false;
         }
-        console.log('Bra')
 
         parentIndex = this.parentIndex(modifiedBranches, curIndex);
         curIndex = this.moveSelfAndChildrenToEndOfParent(modifiedBranches, curIndex);
-
-        console.log('Branches.js moveBranch', 'curIndex', curIndex, 'modifiedBranches', modifiedBranches);
 
         numChildren = this.numChildren(modifiedBranches, curIndex);
 
@@ -448,7 +440,6 @@ class Branches extends React.Component {
 
         // if the current branch is already indented compared to the branch above then nothing to do
 
-        console.log('Branches.js moveBranch right', 'prevLeve', prevLevel, 'curLevel', curLevel)
         if (prevLevel < curLevel) return;
 
         // TODO: precheck all descendants. If descendant already has a level of 5 then alert user that max levels are already being used and cannot move
@@ -815,11 +806,7 @@ class Branches extends React.Component {
   displayBranchContent = () => {
     const { view, isAllowed } = this.props;
 
-    console.log('Branches.js displayBranchContent', 'view', view);
-
     if (this.state.branches === false) return (<></>);
-
-    console.log(`Branches.js displayBranchContent`, 'this.state.branches', this.state.branches);
 
     let closedLevel = 100;
     return (
