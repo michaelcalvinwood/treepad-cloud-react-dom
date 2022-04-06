@@ -39,18 +39,18 @@ export class AddTree extends Component {
       }
     }
 
-      axios(request)
+    axios(request)
       .then((response) => {
         this.props.closeModal()
       })
       .catch((err) => {
-        alert (`Could not create ${this.state.treeName}: ${err.message}`);
+        alert(`Could not create ${this.state.treeName}: ${err.message}`);
       });
   }
-  
+
 
   setIcon = (icon) => {
-    this.setState({icon: icon});
+    this.setState({ icon: icon });
   }
 
   getSelectedIcon = icon => {
@@ -62,46 +62,39 @@ export class AddTree extends Component {
   }
 
   componentDidMount() {
-    this.setState({icon: this.props.icon})
+    this.setState({ icon: this.props.icon })
   }
-  
+
   render() {
-    
+
     const filteredList = this.props.iconList.filter(icon => icon.indexOf(this.state.iconSet) !== -1);
 
     return (
       <div className='modal'>
-          {/* <div className='modal__container'>
-              Modal Begin */}
-              <div className='add-tree'>  
-                  <img className='add-tree__icon' src={process.env.REACT_APP_BASE_URL + this.state.icon} />
-                  <input 
-                    className="add-tree__tree-name"
-                    onChange={this.updateTreeName}
-                    placeholder="Tree Name"/>
-                  <textarea 
-                    className="add-tree__tree-desc"
-                    onChange={this.updateTreeDesc}
-                    placeholder="Tree Description (optional)" />
-                  <button 
-                    className="add-tree__create"
-                    onClick={this.createTree}>
-                    Create</button>
-                  <IconPicker 
-                    iconList={filteredList}
-                    getSelectedIcon={this.getSelectedIcon}
-                    // iconSets={sets}
-                    setIcon={this.setIcon}/>
-                  <button 
-                    className='modal__close'
-                    onClick={this.closeModal}>
-                    Close</button>
-                  
-              </div>
+        <div className='add-tree'>
+          <img className='add-tree__icon' src={process.env.REACT_APP_BASE_URL + this.state.icon} />
+          <input
+            className="add-tree__tree-name"
+            onChange={this.updateTreeName}
+            placeholder="Tree Name" />
+          <textarea
+            className="add-tree__tree-desc"
+            onChange={this.updateTreeDesc}
+            placeholder="Tree Description (optional)" />
+          <button
+            className="add-tree__create"
+            onClick={this.createTree}>
+            Create</button>
+          <IconPicker
+            iconList={filteredList}
+            getSelectedIcon={this.getSelectedIcon}
+            setIcon={this.setIcon} />
+          <button
+            className='modal__close'
+            onClick={this.closeModal}>
+            Close</button>
 
-              {/* Modal End */}
-              
-          {/* </div> */}
+        </div>
       </div>
 
     )

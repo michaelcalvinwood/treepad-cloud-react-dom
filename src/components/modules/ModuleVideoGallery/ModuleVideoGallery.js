@@ -69,15 +69,6 @@ export class ModuleVideoGallery extends Component {
             })}
         </div>
       )
-      
-      
-      this.props.content.map((fileName, index) => {
-        return <ImageMover 
-            url={`${process.env.REACT_APP_BASE_URL}/asset/${this.props.userId}/${fileName}`} 
-            index={index}
-            clickHandler={this.clickHandler}
-            state={false}/>
-        })
         
     }
 

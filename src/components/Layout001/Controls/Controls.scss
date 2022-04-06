@@ -51,7 +51,6 @@
     &__logo-icon {
         height: 1.5rem;
     }
-  
     &__close {
         position: absolute;
         top: .5rem;
@@ -61,7 +60,6 @@
         cursor: pointer;
         z-index: 10;
       }
-
     &__settings {
         height: 1.25rem;
         width: 1.25rem;
@@ -69,7 +67,6 @@
         top: .5rem;
         right: .5rem;
     }
-
     &__title-container {
         text-align: center;
     }
@@ -77,7 +74,6 @@
         width: 3rem;
 
     }
-
     &__content {
         margin: 1rem 0 0 0;
         width: 100%;
@@ -108,7 +104,4 @@
     &__view-name {
         font-size: 3rem;
     }
-
-
-
 }

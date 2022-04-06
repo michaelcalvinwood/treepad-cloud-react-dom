@@ -13,7 +13,6 @@ import UploadModuleAssets from '../../Layout001/UploadModuleAssets/UploadModuleA
 
 export class ModuleImageGallery extends Component {
 
-
     displayImages = () => {
       
             return (

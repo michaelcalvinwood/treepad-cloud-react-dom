@@ -16,7 +16,7 @@ export class ModuleSelector extends Component {
     selector = moduleName => {
         const request = {
             url: `${process.env.REACT_APP_BASE_URL}/modules/${this.props.branchId}`,
-            method: "put", 
+            method: "put",
             headers: {
                 Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
             },
@@ -25,31 +25,31 @@ export class ModuleSelector extends Component {
             }
         }
         axios(request)
-        .then(res => {
-            this.props.getActiveModule(true);
-        })
-        .catch(err => {
-            console.error('ModuleSelector selector axios', err);
-        })
+            .then(res => {
+                this.props.getActiveModule(true);
+            })
+            .catch(err => {
+                console.error('ModuleSelector selector axios', err);
+            })
     }
 
     fetchAvailableModules = () => {
         if (!this.state.availableModules.length) {
             const request = {
                 url: `${process.env.REACT_APP_BASE_URL}/modules/`,
-                method: "get", 
+                method: "get",
                 headers: {
                     Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
                 }
             }
 
             axios(request)
-            .then(res => {
-                setTimeout(() => this.setState({availableModules: res.data}), 500);
-            })
-            .catch(err => {
-                console.err('ModuleSelector fetchAvailableModules axios', err);
-            })
+                .then(res => {
+                    setTimeout(() => this.setState({ availableModules: res.data }), 500);
+                })
+                .catch(err => {
+                    console.err('ModuleSelector fetchAvailableModules axios', err);
+                })
         }
     }
 
@@ -59,22 +59,22 @@ export class ModuleSelector extends Component {
     componentDidMount() {
         this.fetchAvailableModules();
     }
-  render() {
-    return (
-      <div className="module-selector">
-          {
-              this.state.availableModules.map(module => {
-                  return (
-                      <ModuleSelectorCard 
-                        icon={`${process.env.REACT_APP_BASE_URL}${module.module_icon}`}
-                        title={module.module_name} 
-                        selector={() => this.selector(module.module_name)}/>
-                  )
-              })
-          }
-      </div>
-    )
-  }
+    render() {
+        return (
+            <div className="module-selector">
+                {
+                    this.state.availableModules.map(module => {
+                        return (
+                            <ModuleSelectorCard
+                                icon={`${process.env.REACT_APP_BASE_URL}${module.module_icon}`}
+                                title={module.module_name}
+                                selector={() => this.selector(module.module_name)} />
+                        )
+                    })
+                }
+            </div>
+        )
+    }
 }
 
 export default ModuleSelector

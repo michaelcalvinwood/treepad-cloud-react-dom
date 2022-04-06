@@ -37,7 +37,6 @@ export default class Trees extends Component {
         this.setState({
             addTree: true
         })
-        // this.props.setTree(-2);
     }
 
     handleSelect = (treeId) => {

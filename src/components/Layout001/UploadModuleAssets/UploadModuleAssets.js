@@ -273,10 +273,7 @@ export class UploadModuleAssets extends Component {
               <div className="upload-module-assets__work-space">
                 {this.uploadImages()}
                 {this.display()}
-                
-              </div>
-             
-              
+              </div> 
           </div>
         )
     }

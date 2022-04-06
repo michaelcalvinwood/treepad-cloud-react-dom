@@ -13,7 +13,7 @@ export class IconPicker extends Component {
         let loc = 5;
         let end = icon.indexOf('/', loc);
         const set = icon.substring(loc, end);
-        let name = icon.substring(end+1);
+        let name = icon.substring(end + 1);
         loc = name.indexOf('.');
         name = name.substring(0, loc);
         return name;
@@ -30,29 +30,29 @@ export class IconPicker extends Component {
 
     componentDidMount() {
         if (!this.state.filteredList.length && !this.state.search) {
-            this.setState({filteredList: this.props.iconList});
+            this.setState({ filteredList: this.props.iconList });
         }
     }
-    
-    
-  render() {
-    const {iconList, iconSets} = this.props;
-    return (
-      <div className="icon-picker">
-            <input 
-                className="icon-picker__search"
-                placeholder="Icon Search" 
-                onChange={this.getIconFilter} />
-            <div className="icon-picker__icon-list">
-                {
-                    this.state.filteredList.map(icon => {
-                        return <IconCard icon={icon} theKey={icon} src='' getSelectedIcon={this.props.getSelectedIcon}/>
-                    })
-                }
+
+
+    render() {
+        const { iconList, iconSets } = this.props;
+        return (
+            <div className="icon-picker">
+                <input
+                    className="icon-picker__search"
+                    placeholder="Icon Search"
+                    onChange={this.getIconFilter} />
+                <div className="icon-picker__icon-list">
+                    {
+                        this.state.filteredList.map(icon => {
+                            return <IconCard icon={icon} theKey={icon} src='' getSelectedIcon={this.props.getSelectedIcon} />
+                        })
+                    }
+                </div>
             </div>
-      </div>
-    )
-  }
+        )
+    }
 }
 
 export default IconPicker

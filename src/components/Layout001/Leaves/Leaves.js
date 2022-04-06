@@ -151,9 +151,6 @@ class Leaves extends React.Component {
       this.props.updateModuleName('');
       this.props.updateModuleIcon('');
       this.props.updateModuleContent('');
-  
-      // this.props.updateModuleName(res.data.moduleName);
-      // this.props.updateModuleIcon(res.data.moduleIcon);
       this.getActiveModuleContent(res.data.moduleName, branchId);
     })
     .catch(err => {
@@ -265,12 +262,9 @@ class Leaves extends React.Component {
 
     if (view !== 'userView') return (
       <section className={sectionClassName}>
-      {/* <div className="leaves__title-container">
-         {this.displayModuleTitle()}
-      </div> */}
-      <div className='leaves__content'>
-        {this.displayModule()}
-      </div>
+        <div className='leaves__content'>
+          {this.displayModule()}
+        </div>
       </section>
     )
 

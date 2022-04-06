@@ -4,12 +4,6 @@ import Layout001 from './components/Layout001/Layout001';
 import GetUser from './components/GetUser/GetUser'
 import axios from 'axios';
 
-// import Trees from './components/Trees/Trees';
-// import Controls from './components/Controls/Controls';
-// import Branches from './components/Branches/Branches';
-// import Leaves from './components/Leaves/Leaves';
-// import './styles/fontawesome/css/all.css'
-
 class App extends Component {
   state = {
     userName: false,
@@ -119,12 +113,13 @@ class App extends Component {
 
     axios(request)
     .then(res => {
-      sessionStorage.authToken = res.data.token;
-      sessionStorage.userId = res.data.userid.toString();
-      sessionStorage.userName = res.data.username;
-      const userId = Number(res.data.userid);
-      
       if (res.data.view === 'leafView') {
+        sessionStorage.authToken = res.data.token;
+        sessionStorage.userId = res.data.userid.toString();
+        sessionStorage.userName = res.data.username;
+        sessionStorage.view=res.data.view;
+        const userId = Number(res.data.userid);
+        
         this.setState({
           userId: userId,
           userName: res.data.username,
@@ -141,9 +136,16 @@ class App extends Component {
           },
           viewBranchOrder: JSON.parse(res.data.branchOrder)
         })
+        return;
       }
 
       if (res.data.view === 'branchView') {
+        sessionStorage.authToken = res.data.token;
+        sessionStorage.userId = res.data.userid.toString();
+        sessionStorage.userName = res.data.username;
+        sessionStorage.view=res.data.view;
+        const userId = Number(res.data.userid);
+        
         this.setState({
           userId: userId,
           userName: res.data.username,
@@ -160,7 +162,14 @@ class App extends Component {
           },
           viewBranchOrder: JSON.parse(res.data.branchOrder)
         })
+        return;
       }
+      const sessionView = sessionStorage.getItem('view');
+      if (!sessionView) return;
+      sessionStorage.clear();
+      this.setState({
+        view: 'userView'
+      })
     })
     .catch(err => {
       console.error('App.js authenticateUrl axios', err);

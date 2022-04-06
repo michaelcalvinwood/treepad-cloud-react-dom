@@ -34,7 +34,7 @@ class GetUser extends React.Component {
 
         const userName = this.userName;
         const password = this.password;
-        
+
         // login
         const request = {
             url: `${process.env.REACT_APP_BASE_URL}/login`,
@@ -46,17 +46,16 @@ class GetUser extends React.Component {
         }
 
         axios(request)
-        .then(res => {
-            sessionStorage.authToken = res.data.token;
-            sessionStorage.userId = res.data.userId.toString();
-            sessionStorage.userName = userName;
-            const userId = Number(res.data.userId);
-            this.props.setUser(userId, userName);
-            // this.getBranchPool(userId);
-        })
-        .catch(err => {
-            console.error(`GetUser.js handleLogin axios error`, err);
-        })
+            .then(res => {
+                sessionStorage.authToken = res.data.token;
+                sessionStorage.userId = res.data.userId.toString();
+                sessionStorage.userName = userName;
+                const userId = Number(res.data.userId);
+                this.props.setUser(userId, userName);
+            })
+            .catch(err => {
+                console.error(`GetUser.js handleLogin axios error`, err);
+            })
     }
 
     componentDidMount() {
@@ -70,21 +69,20 @@ class GetUser extends React.Component {
         if (!userName) return;
 
         this.props.setUser(Number(userId), userName);
-        // this.getBranchPool(Number(userId));
     }
     render() {
         return (
             <div className='get-user modal'>
                 <div className='modal__container'>
                     <h1>Login/Sign Up</h1>
-                    <form 
+                    <form
                         className='get-user__form'
                         onSubmit={this.handleLogin} >
-                        <input 
+                        <input
                             className='get-user__user-name'
-                            onChange={this.updateUserName} 
+                            onChange={this.updateUserName}
                             placeholder='user name'
-                            type='text'/>
+                            type='text' />
                         <input
                             className='get-user__email'
                             onChange={this.updateEmail}
