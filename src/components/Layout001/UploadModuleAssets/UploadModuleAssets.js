@@ -198,7 +198,6 @@ export class UploadModuleAssets extends Component {
     }
 
     bubbleBlocker = e => {
-       
         e.stopPropagation();
         e.preventDefault();
         return false;
@@ -211,7 +210,7 @@ export class UploadModuleAssets extends Component {
     }
 
     uploadImages = () => {
-        if (!this.state.uploadImages && !this.state.editImages) return;
+        if (!this.state.uploadImages) return;
 
         return (
             <Dropzone 
@@ -231,10 +230,31 @@ export class UploadModuleAssets extends Component {
         )
     }
 
+    editImages = () => {
+        if (!this.state.editImages) return;
+
+        return (
+            <div>
+                
+                        <section className="upload-module-assets__dropzone-container">
+                                <div className='upload-module-assets__dropzone'>
+                                   
+                                    {this.displayPics()}
+                                </div>
+                        </section>
+                   
+            </div>
+        )
+    }
+
     render() {
         let {content, setContent, view} = this.props;
         
         if (view !== 'userView') return this.props.display();
+
+        let toShow;
+
+
         
         return (
           <div className="upload-module-assets">
@@ -272,6 +292,7 @@ export class UploadModuleAssets extends Component {
               </div>
               <div className="upload-module-assets__work-space">
                 {this.uploadImages()}
+                {this.editImages()}
                 {this.display()}
               </div> 
           </div>

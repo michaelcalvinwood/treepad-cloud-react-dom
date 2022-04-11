@@ -47,6 +47,9 @@ class Leaves extends React.Component {
   saveModuleContent = () => {
     const {moduleName, moduleContent, moduleSaved, branchId} = this.props;
 
+    console.log('Leaves.js saveModuleContent');
+    console.trace();
+
     if (!moduleName) return moduleSaved();
 
     const request = {

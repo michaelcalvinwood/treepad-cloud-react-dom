@@ -59,6 +59,8 @@ class Branches extends React.Component {
 
   handleInputKeyUp = (e, branchId) => {
 
+    console.log('Branches.js handleInputKeyUp', e);
+
     switch (e.code.toLowerCase()) {
       case 'enter':
         if (e.shiftKey) {
@@ -263,6 +265,7 @@ class Branches extends React.Component {
   }
 
   numChildren = (branches, index) => {
+    if (index >= branches.length) return 0;
     const curLevel = branches[index].level;
     let numChildren = 0;
     let i;
@@ -381,30 +384,24 @@ class Branches extends React.Component {
         break;
       // move branch and its descendants down
       case 'down':
-        // if branch is already last then nothing to do
         if (curIndex === modifiedBranches.length - 1) return;
 
-        // get desired index
-        numChildren = this.numChildren(modifiedBranches, curIndex);
+        let numAdditionalToRemove = this.numChildren(modifiedBranches, curIndex);
 
-        desiredIndex = curIndex + 1;
+        removed = modifiedBranches.splice(curIndex, numAdditionalToRemove + 1);
 
-        // if desired index is the same then nothing to do
-        if (curIndex === desiredIndex) return true;
+        let numChildrenOfNewTenant = this.numChildren(modifiedBranches, curIndex);
 
-        if (desiredIndex < modifiedBranches.length) {
-          if (modifiedBranches[desiredIndex].level < modifiedBranches[curIndex].level) return;
+        desiredIndex = curIndex + numChildrenOfNewTenant + 1;
+
+        let count = 0;
+        for (i = desiredIndex; i < desiredIndex + numAdditionalToRemove + 1; ++i) {
+          modifiedBranches.splice(i, 0, removed[count++])
         }
 
-        // remove self plus any children
-        removed = modifiedBranches.splice(curIndex, numChildren + 1);
-
-        // add self and children at desired index
-        for (i = 0; i < removed.length; ++i) modifiedBranches.splice(desiredIndex + i, 0, removed[i])
-
-        // update state with the changed branches      
         this.setState({ branches: modifiedBranches });
         break;
+
       case 'left':
         // if branch is already at the top level then there is nothing to do
 
@@ -428,47 +425,29 @@ class Branches extends React.Component {
 
         break;
       case 'right':
-        // if branch is first then it cannot become a child therefore nothing to do
         if (curIndex === 0) return;
 
-        curLevel = modifiedBranches[curIndex].level;
+        curLevel = Number(modifiedBranches[curIndex].level);
+        if (curLevel >= 5) return;
 
-        // if we already have five levels then nothing to do
-        if (Number(curLevel) >= 5) return;
-
-        prevLevel = modifiedBranches[curIndex - 1].level;
-
-        // if the current branch is already indented compared to the branch above then nothing to do
-
+        prevLevel = Number(modifiedBranches[curIndex - 1].level);
         if (prevLevel < curLevel) return;
 
-        // TODO: precheck all descendants. If descendant already has a level of 5 then alert user that max levels are already being used and cannot move
+        console.log('Branches.js index', 'curLevel', curLevel, 'prevLevel', prevLevel);
 
-        if (prevLevel === curLevel) {
-          modifiedBranches[curIndex - 1].status = 'o';
-          ++modifiedBranches[curIndex].level;
+        if (prevLevel >= curLevel) {
+          console.log('Branches.js index get numChildren');
+          numChildren=this.numChildren(modifiedBranches, curIndex);
 
-          // increase the level of all descendants
-          for (i = curIndex + 1; i < modifiedBranches.length; ++i) {
-            if (modifiedBranches[i].level <= curLevel) break;
-            ++modifiedBranches[i].level;
-          }
-
-          this.setState({ branches: modifiedBranches });
-          return;
+          console.log('Branches.js index', 'numChildre', numChildren);
+          for (i = curIndex; i < curIndex + 1 + numChildren; ++i) ++modifiedBranches[i].level;
         }
 
-        // at this point, the previous level is an indented descendant of an upper branch.
-        // find that branch and assign it as the new parent of the current branch
+        if (prevLevel === curLevel) modifiedBranches[curIndex - 1].status = 'o';
+        this.setState({ branches: modifiedBranches });
+        return;
 
-        for (i = curIndex - 1; i > 0; --i) {
-          if (modifiedBranches[i].level === curLevel) {
-            if (modifiedBranches[i].status === null) modifiedBranches[i].status = 'o';
-            ++modifiedBranches[curIndex].level;
-            this.setState({ branches: modifiedBranches });
-            return;
-          }
-        }
+
         break;
 
     }
@@ -713,7 +692,8 @@ class Branches extends React.Component {
 
         const activeBranch = branches.length ? Number(branches[0].branchId) : 0
 
-        this.props.setBranch(activeBranch);
+        if (this.props.view !== 'userView') this.props.setBranch(this.props.viewBranchId);
+        else this.props.setBranch(activeBranch);
 
         this.setState({
           branches: branches,
@@ -744,6 +724,7 @@ class Branches extends React.Component {
 
   componentDidUpdate() {
     let { treeId, controlState, controlHandler, branchId } = this.props;
+    console.log('Branches.js componentDidUpdate', treeId, controlState, branchId);
 
     branchId = branchId.toString();
     this.setBranchFocus(branchId);

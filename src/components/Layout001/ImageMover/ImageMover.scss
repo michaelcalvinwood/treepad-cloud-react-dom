@@ -5,7 +5,7 @@
     position: relative;
     width: calc(($leaveWidth / 4) - 2rem);
     height: calc((($leaveWidth / 4) - 2rem) * .60);
-    margin: 1rem;
+    margin: 1.25rem;
 
     &--inactive {
         display: none;
@@ -79,5 +79,22 @@
             background-color: $default-level-2;
             opacity: 1;
         }
+    }
+    &__edit-container {
+        position: absolute;
+        bottom: -2.25rem;
+        left: 0;
+        height: 2rem;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+    &__delete {
+        height: 1rem;
+        cursor: pointer;
+    }
+    &__edit {
+        height: 1.1rem;
+        cursor: pointer;
     }
 }

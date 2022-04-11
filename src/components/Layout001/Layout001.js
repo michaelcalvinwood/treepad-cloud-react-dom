@@ -187,15 +187,6 @@ class Layout001 extends Component {
     this.setState({saveModule: false});
   }
 
-  handleKeyUp = e => {
-    e.preventDefault();
-    if (e.code === 'ShiftLeft') {
-      this.controlHandler('Save');
-    }
-
-    return false;
-  }
-
   componentDidUpdate() {
     const {viewTreeId, viewBranchId, isAllowed} = this.props;
     if (viewTreeId && viewTreeId !== this.state.treeId) {
@@ -208,9 +199,7 @@ class Layout001 extends Component {
 
   componentDidMount() {
     const {viewTreeId, viewBranchId, isAllowed} = this.props;
-
     window.addEventListener('resize', this.windowResize);
-    window.addEventListener('keyup', this.handleKeyUp);
     this.getBranchPool(this.props.userId);
     if (viewTreeId && viewTreeId !== this.state.treeId) {
       this.setTheTree(viewTreeId);
@@ -258,7 +247,8 @@ class Layout001 extends Component {
               setUrlSelector={this.setUrlSelector}
               userName={userName}
               isAllowed={isAllowed}
-              view={view}/>
+              view={view}
+              viewBranchId/>
             <Leaves 
               windowState={windowState}
               toggleWindow={toggleWindow}
