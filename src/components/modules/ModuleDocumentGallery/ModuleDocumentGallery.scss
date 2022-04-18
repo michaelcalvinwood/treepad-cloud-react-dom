@@ -1,0 +1,43 @@
+@import '../../../styles/partials/variables.scss';
+@import '../../../styles/partials/colors.scss';
+
+.module-document-gallery {
+    &__container {
+        border: 2px solid $default-level-1;
+        height: calc( ($leaveHeight - 9rem) * .70);
+        border-radius: 8px;
+        padding: 1rem;
+        overflow-y: auto;
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+    }
+   
+    &__gallery {
+        position: relative;
+        width: calc(($leaveWidth / 4) - 2rem);
+        height: calc((($leaveWidth / 4) - 2rem) * .60);
+        margin: 1rem;
+        cursor: pointer;
+        border: 1px solid black;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 4px;
+    }
+    &__img {
+        height: 100%;
+        width: 100%;
+        border-radius: 4px;
+    }
+    &__video {
+        height: 100%;
+        width: 100%;
+        border-radius: 4px;
+    }
+}
+
+.react-pdf__Page__textContent, .react-pdf__Page__canvas {
+    height: 100% !important;
+    width: 100% !important;
+}

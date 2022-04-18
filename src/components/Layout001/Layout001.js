@@ -130,7 +130,14 @@ class Layout001 extends Component {
     let saveModule;
 
     if (type === null) saveModule = false;
-    else saveModule = type.toLowerCase() === 'save' ? true : false;
+    else {
+      saveModule = type.toLowerCase() === 'save' ? true : false;
+      if (type.toLowerCase() === 'logout') {
+        sessionStorage.clear();
+        localStorage.clear();
+        window.location.reload();
+      }
+    }
     
     this.setState({
       controlState: type,

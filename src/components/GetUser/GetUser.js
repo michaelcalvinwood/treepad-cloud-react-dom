@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React from 'react';
 import './GetUser.scss';
+import treePadIcon from '../../assets/icons/treepadcloud-icon.svg';
 
 // This is where signup and login will occur
 
@@ -11,6 +12,18 @@ class GetUser extends React.Component {
         this.userName = '';
         this.email = '';
         this.password = '';
+    }
+
+    state = {
+        action: 'login'
+    }
+
+    setSignup = () => {
+        this.setState({action: 'signup'});
+    }
+
+    setLogin = () => {
+        this.setState({action: 'login'});
     }
 
     updateUserName = e => {
@@ -71,10 +84,18 @@ class GetUser extends React.Component {
         this.props.setUser(Number(userId), userName);
     }
     render() {
+        const {action} = this.state;
+
         return (
             <div className='get-user modal'>
-                <div className='modal__container'>
-                    <h1>Login/Sign Up</h1>
+                <div className='get-user__modal-container modal__container'>
+                    <div className='get-user__logo-container'>
+                        <img className='get-user__logo' src={treePadIcon} />
+                        <p className='get-user__product-name'>TreePad Cloud</p>
+                    </div>
+                    {action === 'login' ?
+                    <h1 className="get-user__heading">Login</h1> :
+                    <h1 className="get-user__heading">Sign Up</h1>}
                     <form
                         className='get-user__form'
                         onSubmit={this.handleLogin} >
@@ -83,17 +104,30 @@ class GetUser extends React.Component {
                             onChange={this.updateUserName}
                             placeholder='user name'
                             type='text' />
+                        {action === 'login' ?
+                        '' :
                         <input
                             className='get-user__email'
                             onChange={this.updateEmail}
                             placeholder='email'
-                            type='text' />
+                            type='text' /> }
                         <input
                             className='get-user__password'
                             onChange={this.updatePassword}
                             placeholder='password'
                             type='password' />
                         <button className='get-user__button'>Submit</button>
+                        {action === 'login' ?
+                        <p 
+                            className='get-user__solicit-signup'
+                            onClick={this.setSignup}>
+                            Signup
+                        </p> :
+                        <p 
+                            className='get-user__solicit-login'
+                            onClick={this.setLogin}>
+                            Login
+                        </p>}
                     </form>
                 </div>
             </div>

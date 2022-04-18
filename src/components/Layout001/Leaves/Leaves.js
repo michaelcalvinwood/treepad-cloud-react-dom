@@ -8,6 +8,7 @@ import ModuleSelector from '../ModuleSelector/ModuleSelector';
 import ModuleQuill from '../../modules/ModuleQuill/ModuleQuill';
 import ModuleImageGallery from '../../modules/ModuleImageGallery/ModuleImageGallery';
 import ModuleVideoGallery from '../../modules/ModuleVideoGallery/ModuleVideoGallery';
+import ModuleDocumentGallery from '../../modules/ModuleDocumentGallery/ModuleDocumentGallery';
 
 import UrlSelector from '../UrlSelector/UrlSelector';
 
@@ -65,6 +66,7 @@ class Leaves extends React.Component {
 
     axios(request)
     .then(res => {
+      localStorage.setItem(`branch-${branchId}`, JSON.stringify(this.props.moduleContent));
     })
     .catch(err => {
       console.error('Leaves.js saveModuleContent axios', err);
@@ -79,6 +81,15 @@ class Leaves extends React.Component {
   }
 
   getActiveModuleContent = (moduleName, branchId) => {
+    console.log('Leaves.js getActiveModuleContent', 'branchId', branchId);
+
+    // const content = localStorage.getItem(`branch-${branchId}`);
+
+    // if (content) {
+    //   console.log('Leaves.js getActiveModuleContent (content loaded from local storage)');
+    //   return this.props.updateModuleContent(JSON.parse(content));
+    // }
+
     const request = {
       url: `${process.env.REACT_APP_BASE_URL}/modules/${moduleName}/${branchId}`,
       method: 'get',
@@ -89,6 +100,7 @@ class Leaves extends React.Component {
 
     axios(request)
     .then(res => {      
+      // localStorage.setItem(`branch-${branchId}`, res.data.content);
       this.props.updateModuleContent(JSON.parse(res.data.content));
     })
     .catch(err => {
@@ -181,6 +193,8 @@ class Leaves extends React.Component {
   }
 
   componentDidUpdate() {
+    const {userId, branchId, moduleName, moduleContent, view} = this.props;
+    console.log('Leaves.js componentDidUpdate', userId, branchId, moduleName, view, moduleContent);
     this.getActiveModule();
 
     if (this.props.saveModule) this.saveModuleContent();
@@ -232,6 +246,14 @@ class Leaves extends React.Component {
           setContent={this.setContent}
           view={view} />
         )
+      case 'documents':
+          return (
+            <ModuleDocumentGallery
+            userId={userId}
+            content={moduleContent}
+            setContent={this.setContent}
+            view={view} />
+          )
       default:
         return (
           <div className='leaves__no-module'>
@@ -291,7 +313,7 @@ class Leaves extends React.Component {
         <UrlSelector
               display={this.state.displayCloudLink}
               linkType='Leaf View'
-              url={`http://${userName}.${window.location.host}/l/${branchId}`}
+              url={`https://${userName}.${window.location.host}/l/${branchId}`}
               setCloudLink={this.setCloudLink} />
         </section>
     )

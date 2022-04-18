@@ -16,6 +16,7 @@ import copyIcon from '../../../assets/icons/copy.svg';
 import pasteIcon from '../../../assets/icons/paste.svg';
 import deleteIcon from '../../../assets/icons/delete.svg';
 import settingsIcon from '../../../assets/icons/settings.svg';
+import logoutIcon from '../../../assets/icons/log-out.svg';
 
 import treePadIcon from '../../../assets/icons/treepadcloud-icon.svg';
 import React from 'react';
@@ -131,9 +132,10 @@ class Controls extends React.Component {
                             line2=""
                             controlHandler={controlHandler} />
                         <ControlCard
-                            icon={settingsIcon}
-                            line1="Settings"
-                            line2="" />
+                            icon={logoutIcon}
+                            line1="Logout"
+                            line2="" 
+                            controlHandler={controlHandler}/>
                     </div>
                 </div>
             </section>

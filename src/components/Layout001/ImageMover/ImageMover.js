@@ -16,13 +16,42 @@ class ImageMover extends React.Component {
     urlState: 'unknown',
   }
 
+  extractFilename = url => {
+    let parts = url.split('/');
+    return parts[parts.length-1]
+  }
+  showImage = () => {
+    const {url} = this.props;
+
+    let parts = url.split('.');
+    if (parts.length === 1) return '';
+
+    let extension = parts[parts.length - 1];
+
+    console.log('ImageMover.js showImage', 'extension', extension);
+
+    switch(extension.toLowerCase()) {
+      case 'png':
+      case 'jpg':
+      case 'jpeg':
+      case 'gif':
+      case 'bmp':
+        return <img className="image-mover__image" src={url} />
+      
+      default:
+        return (
+          <div className="image-mover__document">{this.extractFilename(url)}</div>
+        )
+    }
+  }
+
 
   render() {
     const {url, index, clickHandler, state} = this.props;
 
     return (
       <div className='image-mover'>
-          <img className="image-mover__image" src={url} />
+          {this.showImage()}
           <div 
             className={state ? "image-mover__up" : "image-mover__up image-mover--inactive"}
             onClick={(e) => clickHandler(e, index, 'up')}>

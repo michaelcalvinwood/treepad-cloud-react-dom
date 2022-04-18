@@ -20,6 +20,7 @@ class App extends Component {
     },
     windowHeight: window.innerHeight,
     windowWidth: window.innerWidth,
+    // view: window.location.href === process.env.REACT_APP_BASE_URL ? 'userView' : 'unknownView',
     view: 'userView',
     viewTreeId: false,
     viewTreeName: '',
@@ -190,17 +191,22 @@ class App extends Component {
   }
   
   componentDidMount() {
+    console.log('App.js', 'view', this.state.view, 'location', window.location.href, 'expected', process.env.REACT_APP_BASE_URL);
     window.addEventListener('resize', this.windowResize);
     document.title="TreePad Cloud";
     this.validateView();
   }
 
   render () {
-    if (!this.state.userName || !this.state.userId) {
+    const {userName, userId, view} = this.state;
+
+    if (!userName || !userId) {
       return (
+        view === 'userView' ?
         <GetUser 
           setUser={this.setUser}
-          setBranchPool={this.setBranchPool} />
+          setBranchPool={this.setBranchPool} /> :
+          <div></div>
       )
     }
 

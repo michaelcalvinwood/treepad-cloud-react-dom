@@ -7,24 +7,34 @@ import htmlEditButton from "quill-html-edit-button";
 export class ModuleQuill extends Component {
 
   componentDidMount() {
-    
+    const el = document.querySelector('.ql-toolbar');
+
+    if (this.props.view !== 'userView' && el) el.style.display = 'none'; 
+  }
+
+  componentDidUpdate() {
+    const el = document.querySelector('.ql-toolbar');
+
+    if (this.props.view !== 'userView' && el) el.style.display = 'none'; 
   }
 
   saveFormattedContent = content => {
-    console.log('ModuleQuill.js saveFormattedContent', content);
     const contentArray = [];
     contentArray.push(content);
     this.props.setContent(contentArray);
   }
 
   render() {
-    let {content} = this.props;
+    let {content, view} = this.props;
     if (!content.length) content = '';
     else content = content[0];
 
     Quill.register("modules/htmlEditButton", htmlEditButton);
 
-    const  modules  = {
+    let modules = {toolbar: []};
+
+    if (view === 'userView')  {
+      modules  = {
         toolbar: [
             [{ font: [] }],
             [{ header: [1, 2, 3, 4, 5, 6, false] }],
@@ -48,7 +58,9 @@ export class ModuleQuill extends Component {
           prependSelector: 'div#myelement', // a string used to select where you want to insert the overlayContainer, default: null (appends to body),
           editorModules: {} // The default mod
         }
-    };
+      };
+    }
+    
     return (
         <ReactQuill 
         id="react-quill"

@@ -30,7 +30,7 @@ class Branches extends React.Component {
   setCloudLink = state => {
     const { setUrlSelector, userName, branchId } = this.props;
 
-    setUrlSelector('Branch View', `http://${userName}.${window.location.host}/b/${branchId}`);
+    setUrlSelector('Branch View', `https://${userName}.${window.location.host}/b/${branchId}`);
   }
 
   /*
@@ -569,7 +569,7 @@ class Branches extends React.Component {
 
     axios(request)
       .then(res => {
-
+        localStorage.setItem(`branchName-${branchId}`, branchName);
       })
       .catch(err => {
         // TO DO reset branch.ts to 0 so we can try again later; and turn Save red
@@ -626,6 +626,7 @@ class Branches extends React.Component {
 
 
   assignBranchName = (branchId, branchName) => {
+    console.log(`Branches.js assignBranchName (${branchId}:${typeof branchId}, ${branchName})`);
     const branches = [...this.state.branches];
     let branch = branches.find(branch => branch.branchId === branchId);
     if (branch) {
@@ -639,6 +640,12 @@ class Branches extends React.Component {
   }
 
   getBranchName = branchId => {
+    console.log(`Branches.js getBranchName (${branchId}:${typeof branchId})`);
+    const branchName = localStorage.getItem(`branchName-${branchId}`);
+    if (branchName) {
+      return this.assignBranchName(branchId.toString(), branchName);
+    }
+
     const request = {
       url: `${process.env.REACT_APP_BASE_URL}/branches/name/${branchId}`,
       method: "get",
@@ -649,6 +656,7 @@ class Branches extends React.Component {
 
     axios(request)
       .then(res => {
+        localStorage.setItem(`branchName-${branchId}`, res.data.message[0].branch_name);
         this.assignBranchName(res.data.message[0].branch_id.toString(), res.data.message[0].branch_name);
       })
       .catch(err => {

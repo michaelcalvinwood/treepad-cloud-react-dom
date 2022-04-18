@@ -4,13 +4,13 @@ import Dropzone from 'react-dropzone';
 import axios from 'axios';
 import displayImagesIcon from '../../../assets/icons/display-images.svg';
 import editImagesIcon from '../../../assets/icons/edit-images.svg';
-import uploadImagesIcon from '../../../assets/icons/upload-images.svg';
+import uploadAssetsIcon from '../../../assets/icons/upload-images.svg';
 import ImageMover from '../../Layout001/ImageMover/ImageMover';
 
 
 export class UploadModuleAssets extends Component {
     state = {
-        uploadImages: true,
+        uploadAssets: true,
         editImages: false,
         displayImages: false
     }
@@ -19,7 +19,7 @@ export class UploadModuleAssets extends Component {
         switch (button) {
             case 'upload':
                 this.setState({
-                    uploadImages: true,
+                    uploadAssets: true,
                     editImages: false,
                     displayImages: false
                 })
@@ -27,7 +27,7 @@ export class UploadModuleAssets extends Component {
                 return;
             case 'edit':
                 this.setState({
-                    uploadImages: false,
+                    uploadAssets: false,
                     editImages: true,
                     displayImages: false
                 })
@@ -35,7 +35,7 @@ export class UploadModuleAssets extends Component {
                     return;
             case 'display':
                 this.setState({
-                    uploadImages: false,
+                    uploadAssets: false,
                     editImages: false,
                     displayImages: true
                 })
@@ -46,6 +46,7 @@ export class UploadModuleAssets extends Component {
     moveItem = (index, relativeMovement) => {
         let modifiedContent = [...this.props.content];
 
+        console.log('uploadModuleAssets moveItem', 'modifiedContent', modifiedContent);
         let desiredIndex;
         
         if (relativeMovement <= 0) {
@@ -120,7 +121,7 @@ export class UploadModuleAssets extends Component {
                 fileName += '-thumbnail-320x240-0001.png';
                 return fileName;
             default:
-                return `${fileName}.ThUmBnAiL.jpg`;
+                return false;
         }
     }
 
@@ -133,7 +134,7 @@ export class UploadModuleAssets extends Component {
 
         const formData = new FormData();
 
-        let thumbnailStack = [];
+        // let thumbnailStack = [];
 
         for (let i = 0; i < files.length; i += 1) {
             let fileName = files[i].name;
@@ -151,7 +152,7 @@ export class UploadModuleAssets extends Component {
 
                 if (thumbnailName) {
                     modifiedContent.push(thumbnailName);
-                    thumbnailStack.push(fileName);
+                    // thumbnailStack.push(fileName);
                 }
                 else {
                     modifiedContent.push(fileName);
@@ -173,8 +174,9 @@ export class UploadModuleAssets extends Component {
         }
         axios(request)
         .then(res => {
+            console.log('uploadModuleAssets handleUploadedFiles axios', res.data);
             this.props.setContent(modifiedContent);            
-            this.createThumbnails(thumbnailStack);
+            // this.createThumbnails(thumbnailStack);
         })
         .catch(err => {
             console.error('UploadModuleAssets handleUploadedFiles axios', err);
@@ -183,6 +185,7 @@ export class UploadModuleAssets extends Component {
 
     displayPics = () => {
         const {content} = this.props;
+        console.log('uploadModuleAssets displayPics', 'content', content);
         if (!content.length) {
             return (
                 <p>Drag 'n' drop some files here, or click to select files</p>
@@ -190,6 +193,7 @@ export class UploadModuleAssets extends Component {
         }
         return content.map((fileName, index) => {
             return <ImageMover 
+                key={`${this.props.userId}/${fileName}`}
                 url={`${process.env.REACT_APP_BASE_URL}/asset/${this.props.userId}/${fileName}`} 
                 index={index}
                 clickHandler={this.clickHandler}
@@ -209,8 +213,8 @@ export class UploadModuleAssets extends Component {
         }
     }
 
-    uploadImages = () => {
-        if (!this.state.uploadImages) return;
+    uploadAssets = () => {
+        if (!this.state.uploadAssets) return;
 
         return (
             <Dropzone 
@@ -234,16 +238,11 @@ export class UploadModuleAssets extends Component {
         if (!this.state.editImages) return;
 
         return (
-            <div>
-                
-                        <section className="upload-module-assets__dropzone-container">
-                                <div className='upload-module-assets__dropzone'>
-                                   
-                                    {this.displayPics()}
-                                </div>
-                        </section>
-                   
-            </div>
+            <section className="upload-module-assets__dropzone-container">
+                <div className='upload-module-assets__dropzone'>
+                    {this.displayPics()}
+                </div>
+            </section>
         )
     }
 
@@ -260,11 +259,11 @@ export class UploadModuleAssets extends Component {
           <div className="upload-module-assets">
               <div className="upload-module-assets__actions">
                   <div 
-                  className={this.state.uploadImages ? "upload-module-assets__action-card upload-module-assets__action-card--active" : "upload-module-assets__action-card"}
+                  className={this.state.uploadAssets ? "upload-module-assets__action-card upload-module-assets__action-card--active" : "upload-module-assets__action-card"}
                   onClick={(e) => this.setButton(e, 'upload')}>
                       <img 
                         className="upload-module-assets__action-image"
-                        src={uploadImagesIcon}/>
+                        src={uploadAssetsIcon}/>
                       <p className="upload-module-assets__action-title">
                         Upload
                       </p>
@@ -291,7 +290,7 @@ export class UploadModuleAssets extends Component {
                   </div>
               </div>
               <div className="upload-module-assets__work-space">
-                {this.uploadImages()}
+                {this.uploadAssets()}
                 {this.editImages()}
                 {this.display()}
               </div> 

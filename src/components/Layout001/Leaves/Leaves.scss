@@ -1,5 +1,6 @@
 @import '../../../styles/partials/variables.scss';
 @import '../../../styles/partials/colors.scss';
+@import '../../../styles/partials/mixins.scss';
 
 .leaves {
     position: fixed;
@@ -9,6 +10,8 @@
     
     border-left: 1px solid black;
     border-top: 1px solid black;
+
+    overflow-y: auto;
 
     &--active-trees-branches-leaves-controls {
         height: $leaveHeight;
