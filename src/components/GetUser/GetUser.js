@@ -93,6 +93,7 @@ class GetUser extends React.Component {
                         <img className='get-user__logo' src={treePadIcon} />
                         <p className='get-user__product-name'>TreePad Cloud</p>
                     </div>
+                    
                     {action === 'login' ?
                     <h1 className="get-user__heading">Login</h1> :
                     <h1 className="get-user__heading">Sign Up</h1>}

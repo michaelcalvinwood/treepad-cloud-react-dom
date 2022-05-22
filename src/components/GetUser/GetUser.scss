@@ -3,6 +3,9 @@
 .get-user {
     background-color: $default-background;
 
+    &__welcome {
+        text-align: center;
+    }
     &__modal-container {
         width: 60vw;
     }
